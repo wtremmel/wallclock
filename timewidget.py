@@ -1,25 +1,22 @@
 #!/usr/bin/env python
 
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 import time
 
 
-class TimeWidget():
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.image = Image.new("RGBA",(64,64))
+class TimeWidget(Widget):
+    def __init__(self,x=0,y=0,color=(255,255,255),width=64,height=64):
+        super(TimeWidget,self).__init__(x,y,color,width,height)
         self.font = ImageFont.truetype("Roboto-Thin.ttf",15)
-        self.color= (0,255,0)
         self.lasttimestring = ""
-        self.changed = True
 
     def update(self):
         current_time = time.localtime()
         time_string = time.strftime("%H:%M",current_time)
         if (self.lasttimestring != time_string):
-            self.image = Image.new("RGBA",(64,64))
+            self.image = Image.new("RGBA",(self.width,self.height))
             draw = ImageDraw.Draw(self.image)
             draw.text((self.x,self.y),time_string,font=self.font,fill=self.color)
             self.lasttimestring = time_string
