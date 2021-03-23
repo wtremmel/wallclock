@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
