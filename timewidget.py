@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from widget import Widget
@@ -7,7 +7,11 @@ import time
 
 
 class TimeWidget(Widget):
-    def __init__(self,x=0,y=0,color=(255,255,255),width=64,height=64):
+    def __init__(self,x=0,y=0,color=None,width=64,height=64):
+        if color is None:
+            self.dynamiccolor = True
+        else:
+            self.dynamiccolor = False
         super(TimeWidget,self).__init__(x,y,color,width,height)
         self.font = ImageFont.truetype("Roboto-Thin.ttf",15)
         self.lastminute = -1
@@ -19,6 +23,11 @@ class TimeWidget(Widget):
             time_string = time.strftime("%H:%M",current_time)
             self.image = Image.new("RGBA",(self.width,self.height))
             draw = ImageDraw.Draw(self.image)
+            if self.dynamiccolor:
+                if current_time.tm_hour < 7 or current_time.tm_hour > 22:
+                    self.color = (0,0,255)
+                else:
+                    self.color = (255,255,255)
             draw.text((self.x,self.y),time_string,font=self.font,fill=self.color)
             self.lastminute = current_time.tm_min
             self.changed = True
