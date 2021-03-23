@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 class SecondsWidget(Widget):
     def __init__(self,x=0,y=0,color=(255,255,255),width=64,height=64):
         super(SecondsWidget,self).__init__(x,y,color,width,height)
-        self.lastsec = 0
+        self.lastsec = -1
 
     def update(self):
         sec = time.localtime().tm_sec
@@ -38,6 +38,6 @@ if __name__ == "__main__":
     while True:
         seconds.update();
         if (seconds.changed):
-            matrix.SetImage(seconds.image.convert("RGB"))
+             matrix.SetImage(seconds.image.convert("RGB"))
 
 
