@@ -13,7 +13,7 @@ if __name__ == "__main__":
     options.rows = 64
     options.cols = 64
     options.hardware_mapping = "adafruit-hat-pwm"
-    options.pwm_bits = 8
+    options.pwm_bits = 7
 
 
     matrix = RGBMatrix(options = options)
@@ -32,6 +32,9 @@ if __name__ == "__main__":
             im.alpha_composite(mytime.image)
             im.alpha_composite(myseconds.image)
             matrix.SetImage(im.convert("RGB"))
+            mytime.changed = False
+            myseconds.changed = False
+            mydate.changed = False
         time.sleep(0.5)
 
 

@@ -8,7 +8,7 @@ class Widget():
         self.y = y
         self.image = Image.new("RGBA",(width,height))
         self.color= color
-        self.changed = True
+        self.changed = False
         self.width = width
         self.height = height
 
