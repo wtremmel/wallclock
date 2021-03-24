@@ -6,6 +6,8 @@ import time
 from timewidget import TimeWidget
 from secondswidget import SecondsWidget
 from datewidget import DateWidget
+from mqttclient import MqttClient
+from temperaturewidget import TemperatureWidget
 
 
 if __name__ == "__main__":
@@ -21,11 +23,13 @@ if __name__ == "__main__":
     mytime = TimeWidget(x=0,y=0,color=(0,255,0))
     mydate= DateWidget(x=0,y=13,color=(128,128,255))
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
+    gardentemp = TemperatureWidget(x = 30, y = 40, size = 10)
 
     widgetlist = []
     widgetlist.append(mytime)
     widgetlist.append(mydate)
     widgetlist.append(myseconds)
+    widgetlist.append(gardentemp)
 
 
     while True:

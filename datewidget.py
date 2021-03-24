@@ -7,9 +7,9 @@ import time
 
 
 class DateWidget(Widget):
-    def __init__(self,x=0,y=0,color=(255,255,255),width=64,height=64):
-        super(DateWidget,self).__init__(x,y,color,width,height)
-        self.font = ImageFont.truetype("Roboto-Thin.ttf",12)
+    def __init__(self,x=0,y=0,color=(255,255,255),size=12,width=64,height=64):
+        super(DateWidget,self).__init__(x,y,color,size,width,height)
+        self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
         self.lastday = -1
 
     def update(self):
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    currentdate = DateWidget()
+    currentdate = DateWidget(size=9)
 
     while True:
         currentdate.update();

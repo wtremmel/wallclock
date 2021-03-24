@@ -7,13 +7,13 @@ import time
 
 
 class TimeWidget(Widget):
-    def __init__(self,x=0,y=0,color=None,width=64,height=64):
+    def __init__(self,x=0,y=0,color=None,size=15,width=64,height=64):
         if color is None:
             self.dynamiccolor = True
         else:
             self.dynamiccolor = False
-        super(TimeWidget,self).__init__(x,y,color,width,height)
-        self.font = ImageFont.truetype("Roboto-Thin.ttf",15)
+        super(TimeWidget,self).__init__(x,y,color,size,width,height)
+        self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
         self.lastminute = -1
 
     def update(self):

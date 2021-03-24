@@ -7,12 +7,14 @@ import unicodedata
 
 
 class TemperatureWidget(Widget):
-    def __init__(self,x=0,y=0,color=(255,255,255),width=64,height=64):
-        super(TemperatureWidget,self).__init__(x,y,color,width,height)
-        self.font = ImageFont.truetype("Roboto-Thin.ttf",15)
+    def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64):
+        super(TemperatureWidget,self).__init__(x,y,color,size,width,height)
+        self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
         self.lasttemp = -100.0
 
-    def update(self,temperature):
+    def update(self,temperature=None):
+        if temperature == None:
+            return
         t = float(temperature)
         if (self.lasttemp != t):
             tempStr = "{:2.1f}".format(t) + "C"
@@ -47,7 +49,7 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    currenttemp = TemperatureWidget()
+    currenttemp = TemperatureWidget(size=10)
 
     while True:
         currenttemp.update(18.8)
