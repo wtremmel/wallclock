@@ -18,6 +18,9 @@ class CountdownWidget(Widget):
         self.starttime = 0
         self.endtime = 0
         self.running = False
+        self.started = False
+        self.ended = False
+        self.cancelled = False
         self.lasttime= 0
 
     def start(self,minutes=0,seconds=0):
@@ -25,13 +28,17 @@ class CountdownWidget(Widget):
             self.starttime = time.time()
             self.endtime   = self.starttime + (60*minutes) + seconds
             self.running   = True
+            self.started   = True
 
     def cancel(self):
-        self.running = False
+        if (self.running):
+            self.running = False
+            self.started = False
+            self.ended = False
+            self.cancelled = True
 
     def mqttstart(self,topic=None,value=None):
         v = value.decode()
-        print(topic+"::"+v)
         m1 = re.match("(\d+)\s+(\d+)",v)
         m2 = re.match("\d+",v)
         if (v == "cancel"):
@@ -53,7 +60,9 @@ class CountdownWidget(Widget):
         seconds_left = self.endtime - now
         if seconds_left < 0:
             self.running = False
-        if (self.running and self.lasttime != now):
+            self.ended = True
+            self.changed = True
+        elif (self.running and self.lasttime != now):
             current_time = time.gmtime(seconds_left)
             time_string = time.strftime("%H:%M:%S",current_time)
             self.image = Image.new("RGBA",(self.width,self.height))

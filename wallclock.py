@@ -10,6 +10,7 @@ from mqttclient import MqttClient
 from temperaturewidget import TemperatureWidget
 from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
+from framealert import FrameAlert
 
 
 if __name__ == "__main__":
@@ -36,7 +37,6 @@ if __name__ == "__main__":
     widgetlist.append(myseconds)
     widgetlist.append(gardentemp)
     widgetlist.append(pingrouter)
-    widgetlist.append(mycountdown)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
@@ -48,12 +48,33 @@ if __name__ == "__main__":
             w.update()
             if w.changed:
                 change = True
+
         # countdown timer disables date
-        if mycountdown.running:
+        if mycountdown.started:
+            mycountdown.started = False
             try:
                 widgetlist.remove(mydate)
+                widgetlist.append(mycountdown)
             except ValueError:
                 pass
+        elif mycountdown.cancelled:
+            mycountdown.cancelled = False
+            widgetlist.append(mydate)
+            widgetlist.remove(mycountdown)
+        elif mycountdown.ended:
+            mycountdown.ended = False
+            widgetlist.append(mydate)
+            widgetlist.remove(mycountdown)
+            flasher = FrameAlert()
+            for i in range(5):
+                flasher.blinkon()
+                im.alpha_composite(flasher.image)
+                matrix.SetImage(im.convert("RGB"))
+                time.sleep(0.1)
+                flasher.blinkoff()
+                im.alpha_composite(flasher.image)
+                matrix.SetImage(im.convert("RGB"))
+                time.sleep(0.1)
 
         if change:
             im = Image.new("RGBA",(64,64))

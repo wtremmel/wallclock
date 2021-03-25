@@ -46,7 +46,7 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     alertframe = FrameAlert()
-    alertframe.update(count=5,duration=0.2,pause=1)
+    alertframe.update(count=5,duration=0.1,pause=0.2)
 
     while True:
         if (alertframe.changed):
