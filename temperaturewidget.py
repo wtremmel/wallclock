@@ -10,7 +10,7 @@ class TemperatureWidget(Widget):
     def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64):
         super(TemperatureWidget,self).__init__(x,y,color,size,width,height)
         self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
-        self.lasttemp = -100.0
+        self.lasttemp = None
 
     def update(self,temperature=None):
         if temperature == None:
@@ -49,10 +49,9 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    currenttemp = TemperatureWidget(size=10)
-
+    currenttemp = TemperatureWidget(size=12)
+    currenttemp.update(16.9)
     while True:
-        currenttemp.update(18.8)
         if (currenttemp.changed):
             matrix.SetImage(currenttemp.image.convert("RGB"))
         
