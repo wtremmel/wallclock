@@ -3,7 +3,7 @@
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
-import unicodedata
+import time
 
 
 class TemperatureWidget(Widget):
@@ -11,11 +11,19 @@ class TemperatureWidget(Widget):
         super(TemperatureWidget,self).__init__(x,y,color,size,width,height)
         self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
         self.lasttemp = None
+        self.lastupdate = 0
 
-    def update(self,temperature=None):
+    def update(self,sensor=None, temperature=None):
         if temperature == None:
+            if (time.time() - self.lastupdate > 60*5):
+                self.image = Image.new("RGBA",(self.width,self.height))
+                self.lastupdate = time.time()
+                self.changed = True
+            else:
+                self.changed = False
             return
         t = float(temperature)
+        self.lastupdate = time.time()
         if (self.lasttemp != t):
             tempStr = "{:2.1f}".format(t) + "C"
             self.image = Image.new("RGBA",(self.width,self.height))

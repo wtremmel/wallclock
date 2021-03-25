@@ -26,7 +26,7 @@ if __name__ == "__main__":
     mydate= DateWidget(x=0,y=13,color=(128,128,255))
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
-    pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30)
+    pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
 
     widgetlist = []
     widgetlist.append(mytime)
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     widgetlist.append(pingrouter)
 
     client = MqttClient("pi3.garf.de")
-    client.subscribe("/Chattenweg5/Garten/temperature",gardentemp)
+    client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
 
     while True:
         change = False
@@ -50,6 +50,6 @@ if __name__ == "__main__":
                 im.alpha_composite(w.image)
                 w.changed = False
             matrix.SetImage(im.convert("RGB"))
-        # time.sleep(0.5)
+        time.sleep(0.5)
 
 
