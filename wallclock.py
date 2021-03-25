@@ -8,6 +8,7 @@ from secondswidget import SecondsWidget
 from datewidget import DateWidget
 from mqttclient import MqttClient
 from temperaturewidget import TemperatureWidget
+from pingwidget import PingWidget
 
 
 if __name__ == "__main__":
@@ -16,6 +17,7 @@ if __name__ == "__main__":
     options.cols = 64
     options.hardware_mapping = "adafruit-hat-pwm"
     options.pwm_bits = 7
+    options.drop_privileges = False
 
 
     matrix = RGBMatrix(options = options)
@@ -24,12 +26,14 @@ if __name__ == "__main__":
     mydate= DateWidget(x=0,y=13,color=(128,128,255))
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
+    pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30)
 
     widgetlist = []
     widgetlist.append(mytime)
     widgetlist.append(mydate)
     widgetlist.append(myseconds)
     widgetlist.append(gardentemp)
+    widgetlist.append(pingrouter)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp)
