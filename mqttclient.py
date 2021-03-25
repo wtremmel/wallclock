@@ -20,6 +20,8 @@ class MqttClient():
             handler(msg.topic,msg.payload)
         except KeyError:
             print("handler for payload not found")
+        except:
+            print("other error")
 
     def subscribe(self,topic,function):
         self.client.subscribe(topic)

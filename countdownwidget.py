@@ -4,6 +4,7 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 import time
+import re
 
 
 class CountdownWidget(Widget):
@@ -27,6 +28,22 @@ class CountdownWidget(Widget):
 
     def cancel(self):
         self.running = False
+
+    def mqttstart(self,topic=None,value=None):
+        v = value.decode()
+        print(topic+"::"+v)
+        m1 = re.match("(\d+)\s+(\d+)",v)
+        m2 = re.match("\d+",v)
+        if (v == "cancel"):
+            self.cancel()
+        elif m1:
+            minutes = int(m1.group(1))
+            seconds = int(m1.group(2))
+            self.start(minutes,seconds)
+        elif m2:
+            seconds = int(m2.group(0))
+            self.start(seconds = seconds)
+
 
     def big(self):
         pass
@@ -64,7 +81,7 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     currenttime = CountdownWidget()
-    currenttime.start(seconds=60)
+    currenttime.mqttstart("countdown",b"60")
 
     while True:
         currenttime.update();

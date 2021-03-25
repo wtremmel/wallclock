@@ -8,6 +8,7 @@ from secondswidget import SecondsWidget
 from datewidget import DateWidget
 from mqttclient import MqttClient
 from temperaturewidget import TemperatureWidget
+from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
 
 
@@ -24,19 +25,22 @@ if __name__ == "__main__":
 
     mytime = TimeWidget(x=0,y=0,color=(0,255,0))
     mydate= DateWidget(x=0,y=13,color=(128,128,255))
+    mycountdown = CountdownWidget(x=0,y=13)
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
-
+    
     widgetlist = []
     widgetlist.append(mytime)
     widgetlist.append(mydate)
     widgetlist.append(myseconds)
     widgetlist.append(gardentemp)
     widgetlist.append(pingrouter)
+    widgetlist.append(mycountdown)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
+    client.subscribe("countdown",mycountdown.mqttstart)
 
     while True:
         change = False
@@ -44,6 +48,13 @@ if __name__ == "__main__":
             w.update()
             if w.changed:
                 change = True
+        # countdown timer disables date
+        if mycountdown.running:
+            try:
+                widgetlist.remove(mydate)
+            except ValueError:
+                pass
+
         if change:
             im = Image.new("RGBA",(64,64))
             for w in widgetlist:
