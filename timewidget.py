@@ -7,13 +7,17 @@ import time
 
 
 class TimeWidget(Widget):
-    def __init__(self,x=0,y=0,color=None,size=15,width=64,height=64):
+    def __init__(self,x=0,y=0,color=None,size=15,width=64,height=64,font=None):
         if color is None:
             self.dynamiccolor = True
         else:
             self.dynamiccolor = False
         super(TimeWidget,self).__init__(x,y,color,size,width,height)
-        self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
+        if font:
+            self.font = ImageFont.load("fonts/"+font)
+        else:
+            self.font = ImageFont.load("fonts/"+self.size2font(size))
+
         self.lastminute = -1
 
     def update(self):
@@ -27,7 +31,7 @@ class TimeWidget(Widget):
                 if current_time.tm_hour < 7 or current_time.tm_hour > 22:
                     self.color = (0,0,255)
                 else:
-                    self.color = (255,255,255)
+                    self.color = (0,255,0)
             draw.text((self.x,self.y),time_string,font=self.font,fill=self.color)
             self.lastminute = current_time.tm_min
             self.changed = True
@@ -43,12 +47,14 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    currenttime = TimeWidget()
+    currenttime = TimeWidget(size=7)
 
     while True:
         currenttime.update();
         if (currenttime.changed):
-            matrix.SetImage(currenttime.image.convert("RGB"))
+            im = Image.new("RGBA",(64,64))
+            im.alpha_composite(currenttime.image)
+            matrix.SetImage(im.convert("RGB"))
         time.sleep(0.5)
 
 

@@ -7,9 +7,13 @@ import time
 
 
 class DateWidget(Widget):
-    def __init__(self,x=0,y=0,color=(255,255,255),size=12,width=64,height=64):
+    def __init__(self,x=0,y=0,color=(255,255,255),size=12,width=64,height=64,font=None):
         super(DateWidget,self).__init__(x,y,color,size,width,height)
-        self.font = ImageFont.truetype("Roboto-Thin.ttf",self.size)
+        if font:
+            self.font = ImageFont.load("fonts/"+font)
+        else:
+            self.font = ImageFont.load("fonts/"+self.size2font(size))
+
         self.lastday = -1
 
     def update(self):
