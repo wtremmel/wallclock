@@ -14,7 +14,6 @@ class MqttClient():
         client.subscribe(topiclist)
 
     def on_message(self,client, userdata, msg):
-        print(msg.topic+" "+str(msg.payload))
         try:
             handler = self.handler[msg.topic]
             handler(msg.topic,msg.payload)

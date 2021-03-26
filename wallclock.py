@@ -10,7 +10,26 @@ from mqttclient import MqttClient
 from temperaturewidget import TemperatureWidget
 from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
-from framealert import FrameAlert
+from framealert import FrameAlert, ImageAlert
+import json
+
+haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
+esKlingelt = ImageAlert(y=32,howlong=10,filename="images/bell-64.png")
+
+def tuerklingelAlert(topic,msg):
+    global esKligelt
+    # /Chattenweg5/zigbee2mqtt/Tuerklingel {"battery":100,"contact":true,"linkquality":78,"voltage":3015}
+    x = json.loads(msg)
+    contact = x["contact"]
+    if contact == False:
+        esKlingelt.on()
+
+def haustuerAlert(topic,msg):
+    global haustuerOffen
+    x = json.loads(msg)
+    contact = x["contact"]
+    if contact == False:
+        haustuerOffen.on()
 
 
 if __name__ == "__main__":
@@ -30,6 +49,7 @@ if __name__ == "__main__":
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
+
     
     widgetlist = []
     widgetlist.append(mytime)
@@ -37,10 +57,14 @@ if __name__ == "__main__":
     widgetlist.append(myseconds)
     widgetlist.append(gardentemp)
     widgetlist.append(pingrouter)
+    widgetlist.append(haustuerOffen)
+    widgetlist.append(esKlingelt)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
     client.subscribe("countdown",mycountdown.mqttstart)
+    client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
+    client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
 
     while True:
         change = False
