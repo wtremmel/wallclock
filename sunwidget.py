@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 from astral import *
 import datetime
 from astral.sun import *
+import random
 
 class SunWidget(Widget):
     def __init__(self,x=0,y=0,color=(255,255,255),size=32,width=64,height=64):
@@ -36,6 +37,12 @@ class SunWidget(Widget):
         ni = night(self.location.observer)
         if (now >= ni[0] and now <= ni[1]):
             dr.rectangle(rect,fill=(0,0,5),outline=outline)
+            for i in range(20):
+                starx = random.randrange(self.x+1,self.x+self.size-2)
+                stary = random.randrange(self.y+1,self.y+self.size-2)
+                starbri= random.randrange(5,50)
+                dr.point([starx,stary],fill=(starbri,starbri,starbri))
+
             return bg
 
 
@@ -44,7 +51,7 @@ class SunWidget(Widget):
         """Draws a sun or a moon depending on the time of day"""
         s = sun(self.location.observer)
         now = datetime.datetime.now(datetime.timezone.utc)
-        now = datetime.datetime.fromisoformat("2021-03-27 17:52+00:00")
+        now = datetime.datetime.fromisoformat("2021-03-27 19:52+00:00")
         s["now"] = now
         # (bluestart,blueend) = night(self.location.observer,direction = SunDirection.SETTING)
         (bluestart,blueend) = night(self.location.observer)
