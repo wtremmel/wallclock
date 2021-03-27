@@ -18,28 +18,30 @@ class SunWidget(Widget):
         self.elevation = 0
 
     def drawSun(self,now = None):
+        su = Image.new("RGBA",(self.size,self.size))
         bg = Image.new("RGBA",(self.width,self.height))
-        dr = ImageDraw.Draw(bg)
+        dr = ImageDraw.Draw(su)
         radius = self.size/4
 
-        sunx1 = self.x + self.size/2 - radius
-        sunx2 = self.x + self.size/2 + radius
+        sunx1 = self.size/2 - radius
+        sunx2 = self.size/2 + radius
 
         z= zenith(self.location.observer,now)
         height = elevation(self.location.observer,now)
         percentage = (height / z) * 100.0
-        center = (self.height - self.x) * percentage / 100
-        c = self.height - center
-        el = [sunx1,self.y+c-radius,sunx2,self.y+c+radius]
+        c = self.size - self.size * percentage / 100
+        el = [sunx1,c-radius,sunx2,c+radius]
 
         self.elevation = height
 
-        # print("zenith =",z)
-        # print("elevation =",height)
+        print("zenith =",z)
+        print("elevation =",height)
         # print("percentage=",percentage)
         # print("center=",center)
 
-        dr.ellipse(el,fill=(100,100,0),width=0)
+        if (self.elevation >= 0):
+            dr.ellipse(el,fill=(100,100,0),width=0)
+            bg.paste(su,(self.x,self.y))
         return bg
 
     def drawMoon(self,now = None):
@@ -53,9 +55,28 @@ class SunWidget(Widget):
 
         phase = moon.phase(now)
         print("Moonphase = ",phase)
-
         el = [sunx1,suny1,sunx2,suny2]
         dr.ellipse(el,fill=(5,5,5),width=0)
+
+        if phase < 7:
+            # new moon 0
+            pass 
+        elif phase < 14:
+            # first quarter
+            pass
+        elif phase < 21:
+            # full moon
+            pass
+        elif phase < 28:
+            # last quarter 360 = phase/28 * 360
+            pass
+
+        angle = phase/28*360
+        start = 180 - angle/2
+        end = 180 + angle/2
+
+        dr.pieslice(el,start,end,fill=(80,80,80))
+
         return bg
 
     def background(self,now = None):
@@ -102,17 +123,19 @@ class SunWidget(Widget):
 
 
 
-    def update(self):
+    def update(self,t=None):
         """Draws a sun or a moon depending on the time of day"""
-        if (time.time() < self.lastupdate+60):
+        if (t == None and time.time() < self.lastupdate+60):
             self.changed = False
             return
         else:
             self.lastupdate = time.time()
 
-        now = datetime.datetime.now(datetime.timezone.utc)
         s = sun(self.location.observer)
-        now = datetime.datetime.fromisoformat("2021-03-27 22:08+00:00")
+        if t == None:
+            now = datetime.datetime.now(datetime.timezone.utc)
+        else:
+            now = datetime.datetime.fromisoformat("2021-03-27 "+t+"+00:00")
         s["now"] = now
         (bluestart,blueend) = golden_hour(self.location.observer,direction = SunDirection.SETTING)
         # (bluestart,blueend) = daylight(self.location.observer)
@@ -168,10 +191,11 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    u = SunWidget(size=64)
-    u.update()
+    u = SunWidget(size=16)
         
     while True:
+        t = input("HH:MM ")
+        u.update(t)
         if (u.changed):
             matrix.SetImage(u.image.convert("RGB"))
             u.changed = False

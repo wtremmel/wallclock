@@ -50,7 +50,7 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     mytime = TimeWidget(x=0,y=0,color=(0,255,0))
-    mydate= DateWidget(x=0,y=13,color=(128,128,255))
+    mydate= DateWidget(x=0,y=15,color=(128,128,255))
     mycountdown = CountdownWidget(x=0,y=13,size=13,bigat=10)
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
