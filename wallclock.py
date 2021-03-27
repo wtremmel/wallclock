@@ -6,6 +6,7 @@ import time
 from timewidget import TimeWidget
 from secondswidget import SecondsWidget
 from datewidget import DateWidget
+from sunwidget import SunWidget
 from mqttclient import MqttClient
 from temperaturewidget import TemperatureWidget
 from countdownwidget import CountdownWidget
@@ -15,6 +16,9 @@ import json
 
 haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
 esKlingelt = ImageAlert(y=32,howlong=10,filename="images/bell-64.png")
+
+matrixBrightness = 100
+
 
 def tuerklingelAlert(topic,msg):
     global esKligelt
@@ -31,6 +35,9 @@ def haustuerAlert(topic,msg):
     if contact == False:
         haustuerOffen.on()
 
+def setBrightness(topic,msg):
+    global matrixBrightness
+    matrixBrightness = int(msg)
 
 if __name__ == "__main__":
     options = RGBMatrixOptions()
@@ -40,7 +47,6 @@ if __name__ == "__main__":
     options.pwm_bits = 7
     options.drop_privileges = False
 
-
     matrix = RGBMatrix(options = options)
 
     mytime = TimeWidget(x=0,y=0,color=(0,255,0))
@@ -49,10 +55,12 @@ if __name__ == "__main__":
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
+    astro = SunWidget(x=48,y=1,size=16)
 
     
     widgetlist = []
     widgetlist.append(mytime)
+    widgetlist.append(astro)
     widgetlist.append(mydate)
     widgetlist.append(myseconds)
     widgetlist.append(gardentemp)
@@ -65,6 +73,7 @@ if __name__ == "__main__":
     client.subscribe("countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
+    client.subscribe("/Wallclock/Brightness",setBrightness)
 
     while True:
         change = False
@@ -105,6 +114,7 @@ if __name__ == "__main__":
             for w in widgetlist:
                 im.alpha_composite(w.image)
                 w.changed = False
+            matrix.brightness = matrixBrightness
             matrix.SetImage(im.convert("RGB"))
         time.sleep(0.5)
 
