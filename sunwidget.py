@@ -4,8 +4,9 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 from astral import *
-import datetime
+from astral import moon
 from astral.sun import *
+import datetime
 import random
 import time
 
@@ -14,24 +15,47 @@ class SunWidget(Widget):
         super(SunWidget,self).__init__(x,y,color,size,width,height)
         self.location = LocationInfo("Bad Homburg","Germany","Europe/Berlin",50.226831,8.618162)
         self.lastupdate = 0
+        self.elevation = 0
 
     def drawSun(self,now = None):
         bg = Image.new("RGBA",(self.width,self.height))
         dr = ImageDraw.Draw(bg)
-        rect = [self.x,self.y,self.x+self.size-1,self.y+self.size-1]
         radius = self.size/4
 
         sunx1 = self.x + self.size/2 - radius
         sunx2 = self.x + self.size/2 + radius
-        el = [sunx1,self.y,sunx2,self.y + self.size/2]
 
         z= zenith(self.location.observer,now)
         height = elevation(self.location.observer,now)
+        percentage = (height / z) * 100.0
+        center = (self.height - self.x) * percentage / 100
+        c = self.height - center
+        el = [sunx1,self.y+c-radius,sunx2,self.y+c+radius]
 
-        print("zenith =",z)
-        print("elevation =",height)
+        self.elevation = height
+
+        # print("zenith =",z)
+        # print("elevation =",height)
+        # print("percentage=",percentage)
+        # print("center=",center)
 
         dr.ellipse(el,fill=(100,100,0),width=0)
+        return bg
+
+    def drawMoon(self,now = None):
+        bg = Image.new("RGBA",(self.width,self.height))
+        dr = ImageDraw.Draw(bg)
+        radius = self.size/6
+        sunx1 = self.x + self.size/2 - radius
+        sunx2 = self.x + self.size/2 + radius
+        suny1 = self.y + self.size/2 - radius
+        suny2 = self.y + self.size/2 + radius
+
+        phase = moon.phase(now)
+        print("Moonphase = ",phase)
+
+        el = [sunx1,suny1,sunx2,suny2]
+        dr.ellipse(el,fill=(5,5,5),width=0)
         return bg
 
     def background(self,now = None):
@@ -88,7 +112,7 @@ class SunWidget(Widget):
 
         now = datetime.datetime.now(datetime.timezone.utc)
         s = sun(self.location.observer)
-        # now = datetime.datetime.fromisoformat("2021-03-27 17:08+00:00")
+        now = datetime.datetime.fromisoformat("2021-03-27 22:08+00:00")
         s["now"] = now
         (bluestart,blueend) = golden_hour(self.location.observer,direction = SunDirection.SETTING)
         # (bluestart,blueend) = daylight(self.location.observer)
@@ -104,6 +128,10 @@ class SunWidget(Widget):
 
         self.image = self.background(now=now)
         self.image.alpha_composite(self.drawSun(now=now))
+
+        if self.elevation < 0:
+            self.image.alpha_composite(self.drawMoon(now=now))
+
 
         print("Elevation: ",elevation(self.location.observer))
 
@@ -140,7 +168,7 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    u = SunWidget(size=16)
+    u = SunWidget(size=64)
     u.update()
         
     while True:
