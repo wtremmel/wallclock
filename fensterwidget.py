@@ -13,9 +13,9 @@ class FensterWidget(Widget):
         self.fensterliste = {}
         self.fenster = {}
         self.stockwerke = ("EG",1,2)
-        self.fenster["EG"] = ("Haustuer","Kueche")
-        self.fenster[1] = ("Bad1","Schlafzimmer")
-        self.fenster[2] = ("Bad2","Arbeitszimmer")
+        self.fenster["EG"] = ("EG_Haustuer","Kueche_Fenster","WZ_Fenster","WZ_Fenster_R")
+        self.fenster[1] = ("Bad1_Fenster","Schlafzimmer_Balkontuer")
+        self.fenster[2] = ("Arbeitszimmer_Balkontuer","Arbeitszimmer_Dachfenster","Bad2_Fenster")
         for s in self.stockwerke:
             for f in self.fenster[s]:
                 self.fensterliste[f] = 0
@@ -27,12 +27,19 @@ class FensterWidget(Widget):
 
         isopen = msg.decode()
 
-        fenster = re.search("/([a-zA-Z0-9]+)$",topic).group(1)
-        print("fenster =",fenster)
+        found = re.search("/([a-zA-Z0-9_]+)$",topic)
+        if found:
+            fenster = found.group(1)
+        else:
+            self.changed = False
+            return
 
-        if self.fensterliste[fenster] != isopen:
-            self.changed = True
-            self.fensterliste[fenster] = isopen
+        try:
+            if self.fensterliste[fenster] != isopen:
+                self.changed = True
+                self.fensterliste[fenster] = isopen
+        except KeyError:
+            print("Unknown window: ",fenster)
 
         if self.changed:
             pixelcount = 0
@@ -61,8 +68,16 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     u = FensterWidget(size=2)
-    u.update("/Chattenweg5/Fenster/Bad1",b"0")
-    u.update("/Chattenweg5/Fenster/Bad2",b"1")
+    u.update("/Chattenweg5/Fenster/Arbeitszimmer_Balkontuer",b'0')
+    u.update("/Chattenweg5/Fenster/Arbeitszimmer_Dachfenster",b'0')
+    u.update("/Chattenweg5/Fenster/Bad1_Fenster",b'0')
+    u.update("/Chattenweg5/Fenster/Bad2_Fenster",b'0')
+    u.update("/Chattenweg5/Fenster/EG_Haustuer",b'0')
+    u.update("/Chattenweg5/Fenster/Kueche_Fenster",b'0')
+    u.update("/Chattenweg5/Fenster/Schlafzimmer_Balkontuer",b'0')
+    u.update("/Chattenweg5/Fenster/WZ_Fenster",b'0')
+    u.update("/Chattenweg5/Fenster/WZ_Fenster_R",b'0')
+    u.update("/Chattenweg5/Fenster/rg_Fenster",b'0')
     while True:
         if (u.changed):
             matrix.SetImage(u.image.convert("RGB"))
