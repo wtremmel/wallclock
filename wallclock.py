@@ -79,6 +79,7 @@ if __name__ == "__main__":
     client.subscribe("/Wallclock/Brightness",setBrightness)
     client.subscribe("/Chattenweg5/Fenster/#",allefenster.update)
 
+
     while True:
         change = False
         for w in widgetlist:
