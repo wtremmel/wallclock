@@ -12,6 +12,7 @@ from temperaturewidget import TemperatureWidget
 from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
 from framealert import FrameAlert, ImageAlert
+from fensterwidget import FensterWidget
 import json
 
 haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
     astro = SunWidget(x=48,y=1,size=16)
+    allefenster = FensterWidget(x=60,y=18,size=2)
 
     
     widgetlist = []
@@ -67,6 +69,7 @@ if __name__ == "__main__":
     widgetlist.append(pingrouter)
     widgetlist.append(haustuerOffen)
     widgetlist.append(esKlingelt)
+    widgetlist.append(allefenster)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
@@ -74,6 +77,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
+    client.subscribe("/Chattenweg5/Fenster/#",allefenster.update)
 
     while True:
         change = False

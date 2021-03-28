@@ -4,6 +4,7 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 import time
 from temperaturewidget import TemperatureWidget
 import paho.mqtt.client as mqtt
+import re
 
 class MqttClient():
     def on_connect(self,client, userdata, flags, rc):
@@ -18,13 +19,16 @@ class MqttClient():
             handler = self.handler[msg.topic]
             handler(msg.topic,msg.payload)
         except KeyError:
-            print("handler for payload not found")
+            for k,v in self.handler.items():
+                if re.match(k,msg.topic):
+                    v(msg.topic,msg.payload)
         except:
             print("other error")
 
     def subscribe(self,topic,function):
         self.client.subscribe(topic)
-        self.handler[topic] = function
+        s = re.sub('#','',topic)
+        self.handler[s] = function
 
     def __init__(self,server):
         self.client = mqtt.Client()

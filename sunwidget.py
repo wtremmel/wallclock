@@ -21,7 +21,7 @@ class SunWidget(Widget):
         su = Image.new("RGBA",(self.size,self.size))
         bg = Image.new("RGBA",(self.width,self.height))
         dr = ImageDraw.Draw(su)
-        radius = self.size/4
+        radius = self.size/3
 
         sunx1 = self.size/2 - radius
         sunx2 = self.size/2 + radius
@@ -34,8 +34,8 @@ class SunWidget(Widget):
 
         self.elevation = height
 
-        print("zenith =",z)
-        print("elevation =",height)
+        # print("zenith =",z)
+        # print("elevation =",height)
         # print("percentage=",percentage)
         # print("center=",center)
 
@@ -47,14 +47,14 @@ class SunWidget(Widget):
     def drawMoon(self,now = None):
         bg = Image.new("RGBA",(self.width,self.height))
         dr = ImageDraw.Draw(bg)
-        radius = self.size/6
+        radius = self.size/5
         sunx1 = self.x + self.size/2 - radius
         sunx2 = self.x + self.size/2 + radius
         suny1 = self.y + self.size/2 - radius
         suny2 = self.y + self.size/2 + radius
 
         phase = moon.phase(now)
-        print("Moonphase = ",phase)
+        # print("Moonphase = ",phase)
         el = [sunx1,suny1,sunx2,suny2]
         dr.ellipse(el,fill=(5,5,5),width=0)
 
@@ -137,49 +137,12 @@ class SunWidget(Widget):
         else:
             now = datetime.datetime.fromisoformat("2021-03-27 "+t+"+00:00")
         s["now"] = now
-        (bluestart,blueend) = golden_hour(self.location.observer,direction = SunDirection.SETTING)
-        # (bluestart,blueend) = daylight(self.location.observer)
-        print((
-            f'Dawn:    {s["dawn"]}\n'
-            f'Sunrise: {s["sunrise"]}\n'
-            f'Noon:    {s["noon"]}\n'
-            f'Sunset:  {s["sunset"]}\n'
-            f'Dusk:    {s["dusk"]}\n'
-            f'Now:     {s["now"]}\n'
-            f'from   {bluestart} to {blueend}\n'
-        ))
 
         self.image = self.background(now=now)
         self.image.alpha_composite(self.drawSun(now=now))
 
         if self.elevation < 0:
             self.image.alpha_composite(self.drawMoon(now=now))
-
-
-        print("Elevation: ",elevation(self.location.observer))
-
-
-        if (now > s["dawn"]):
-            print("after dawn")
-        if (now > s["sunrise"]):
-            print("after sunrise")
-        if (now > s["noon"]):
-            print("after noon")
-        if (now > s["sunset"]):
-            print("after sunset")
-        if (now > s["dusk"]):
-            print("after dusk")
-
-        if (now < s["dawn"]):
-            print("before dawn")
-        if (now < s["sunrise"]):
-            print("before sunrise")
-        if (now < s["noon"]):
-            print("before noon")
-        if (now < s["sunset"]):
-            print("before sunset")
-        if (now < s["dusk"]):
-            print("before dusk")
 
         self.changed = True
 
