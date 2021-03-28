@@ -91,19 +91,22 @@ class SunWidget(Widget):
         bh1 = blue_hour(self.location.observer,direction = SunDirection.SETTING)
         bh2 = blue_hour(self.location.observer,direction = SunDirection.RISING)
         if (now >= bh1[0] and now <= bh1[1]) or (now >= bh2[0] and now <= bh2[1]):
-            dr.rectangle(rect,fill=(0,0,50),outline=outline)
+            print("blue hour")
+            dr.rectangle(rect,fill=(0,0,70),outline=outline)
             return bg
 
         go1 = golden_hour(self.location.observer,direction = SunDirection.SETTING)
         go2 = golden_hour(self.location.observer,direction = SunDirection.RISING)
         if (now >= go1[0] and now <= go1[1]) or (now >= go2[0] and now <= go2[1]):
+            print("golden hour")
             dr.rectangle(rect,fill=(90,60,0),outline=outline)
             return bg
 
         tw1 = twilight(self.location.observer,direction = SunDirection.SETTING)
         tw2 = twilight(self.location.observer,direction = SunDirection.RISING)
         if (now >= tw1[0] and now <= tw1[1]) or (now >= tw2[0] and now <= tw2[1]):
-            dr.rectangle(rect,fill=(20,10,50),outline=outline)
+            print("twilight")
+            dr.rectangle(rect,fill=(20,10,40),outline=outline)
             return bg
 
         ni = night(self.location.observer)
