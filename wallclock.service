@@ -1,0 +1,10 @@
+[Unit]
+Description=Wallclock
+
+[Service]
+ExecStart=python3 /home/pi/wallclock/wallclock.py
+Type=exec
+WorkingDirectory=/home/pi/wallclock
+
+[Install]
+WantedBy=multi-user.target
