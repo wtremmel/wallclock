@@ -42,21 +42,23 @@ class FensterWidget(Widget):
             print("Unknown window: ",fenster)
 
         if self.changed:
-            pixelcount = 0
+            thisy = 0
             self.image = Image.new("RGBA",(self.width,self.height))
             draw = ImageDraw.Draw(self.image)
             for s in self.stockwerke:
                 for f in self.fenster[s]:
-                    if self.fensterliste[f] == 0:
+                    if self.fensterliste[f] == "0":
                         fcolor = (0,255,0)
                     else:
                         fcolor = (255,0,0)
                     draw.rectangle([
-                        self.x,self.y+(self.size)*pixelcount,
-                        self.x+self.size-1,self.y+self.size+self.size*pixelcount],
+                        self.x,
+                        thisy,
+                        self.x+self.size-1,
+                        thisy+self.size-1],
                         fill=fcolor)
-                    pixelcount += 1
-                pixelcount += 1
+                    thisy += self.size+1
+                thisy += self.size+1
 
 
 
@@ -67,7 +69,7 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    u = FensterWidget(size=2)
+    u = FensterWidget(size=3)
     u.update("/Chattenweg5/Fenster/Arbeitszimmer_Balkontuer",b'0')
     u.update("/Chattenweg5/Fenster/Arbeitszimmer_Dachfenster",b'0')
     u.update("/Chattenweg5/Fenster/Bad1_Fenster",b'0')
