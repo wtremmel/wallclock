@@ -42,7 +42,7 @@ class FensterWidget(Widget):
             print("Unknown window: ",fenster)
 
         if self.changed:
-            thisy = 0
+            thisy = self.y 
             self.image = Image.new("RGBA",(self.width,self.height))
             draw = ImageDraw.Draw(self.image)
             for s in self.stockwerke:
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     matrix = RGBMatrix(options = options)
 
-    u = FensterWidget(size=3)
+    u = FensterWidget(x=60,y=18,size=2)
     u.update("/Chattenweg5/Fenster/Arbeitszimmer_Balkontuer",b'0')
     u.update("/Chattenweg5/Fenster/Arbeitszimmer_Dachfenster",b'0')
     u.update("/Chattenweg5/Fenster/Bad1_Fenster",b'0')

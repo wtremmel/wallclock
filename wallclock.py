@@ -57,7 +57,7 @@ if __name__ == "__main__":
     gardentemp = TemperatureWidget(x = 30, y = 40, size = 12)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
     astro = SunWidget(x=48,y=1,size=16)
-    allefenster = FensterWidget(x=60,y=18,size=2)
+    allefenster = FensterWidget(x=62,y=17,size=2)
 
     
     widgetlist = []
