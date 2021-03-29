@@ -13,6 +13,7 @@ from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
 from framealert import FrameAlert, ImageAlert
 from fensterwidget import FensterWidget
+from onoffbrightness import OnOffBrightness
 import json
 
 haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
@@ -62,6 +63,7 @@ if __name__ == "__main__":
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
     astro = SunWidget(x=46,y=1,size=18)
     allefenster = FensterWidget(x=62,y=19,size=2)
+    setbrightness = OnOffBrightness()
 
     aussentemperatur = TemperatureWidget(x=0,y=25,size=12)
     
@@ -88,6 +90,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
     client.subscribe("/Chattenweg5/Fenster/#",allefenster.update)
+    client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
 
 
     while True:
