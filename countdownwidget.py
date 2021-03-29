@@ -8,7 +8,7 @@ import re
 
 
 class CountdownWidget(Widget):
-    def __init__(self,x=0,y=0,color=None,size=15,width=64,height=64,font=None,bigat=-1):
+    def __init__(self,x=0,y=0,color=None,size=14,width=64,height=64,font=None,bigat=-1):
         if color is None:
             self.dynamiccolor = True
         else:
@@ -48,7 +48,8 @@ class CountdownWidget(Widget):
     def mqttstart(self,topic=None,value=None):
         v = value.decode()
         m1 = re.match("(\d+)\s+(\d+)",v)
-        m2 = re.match("\d+",v)
+        m2 = re.match("^\d+$",v)
+        at = re.match("(\d+):(\d+)",v)
         if (v == "cancel"):
             self.cancel()
         elif m1:
@@ -58,6 +59,13 @@ class CountdownWidget(Widget):
         elif m2:
             seconds = int(m2.group(0))
             self.start(seconds = seconds)
+        elif at:
+            lthen = list(time.localtime())
+            lthen[3]=int(at.group(1))
+            lthen[4]=int(at.group(2)) # minutes
+            lthen[5]=0
+            then = time.mktime(tuple(lthen))
+            self.start(seconds=(then-int(time.time())))
 
 
     def big(self):
@@ -120,13 +128,10 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     currenttime = CountdownWidget()
-    currenttime.mqttstart("countdown",b"60")
+    currenttime.mqttstart("countdown",b"16:00")
 
     while True:
-        if time.time() - currenttime.endtime <= 10:
-            currenttime.big()
-        else:
-            currenttime.update();
+        currenttime.update()
         if (currenttime.changed):
             im = Image.new("RGBA",(64,64))
             im.alpha_composite(currenttime.image)
