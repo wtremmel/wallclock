@@ -63,6 +63,7 @@ if __name__ == "__main__":
     astro = SunWidget(x=46,y=1,size=18)
     allefenster = FensterWidget(x=62,y=19,size=2)
 
+    aussentemperatur = TemperatureWidget(x=0,y=25,size=12)
     
     widgetlist = []
     widgetlist.append(mytime)
@@ -76,6 +77,7 @@ if __name__ == "__main__":
     widgetlist.append(haustuerOffen)
     widgetlist.append(esKlingelt)
     widgetlist.append(allefenster)
+    widgetlist.append(aussentemperatur)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
