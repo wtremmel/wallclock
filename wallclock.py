@@ -38,7 +38,9 @@ def haustuerAlert(topic,msg):
 
 def setBrightness(topic,msg):
     global matrixBrightness
-    matrixBrightness = int(msg)
+    newBrightness = int(msg)
+    if newBrightness >= 0 and newBrightness <= 255:
+        matrixBrightness = int(msg)
 
 if __name__ == "__main__":
     options = RGBMatrixOptions()
