@@ -12,7 +12,7 @@ class FensterWidget(Widget):
         self.lastupdate = 0
         self.fensterliste = {}
         self.fenster = {}
-        self.stockwerke = ("EG",1,2)
+        self.stockwerke = (2,1,"EG")
         self.fenster["EG"] = ("EG_Haustuer","Kueche_Fenster","WZ_Fenster","WZ_Fenster_R")
         self.fenster[1] = ("Bad1_Fenster","Schlafzimmer_Balkontuer")
         self.fenster[2] = ("Arbeitszimmer_Balkontuer","Arbeitszimmer_Dachfenster","Bad2_Fenster")
