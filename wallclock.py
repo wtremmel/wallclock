@@ -81,7 +81,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
     client.subscribe("/Chattenweg5/Vorgarten/temperature",vorgartentemp.update)
     client.subscribe("/Chattenweg5/2OG-Loggia/temperature",loggiatemp.update)
-    client.subscribe("countdown",mycountdown.mqttstart)
+    client.subscribe("/Wallclock/Countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
