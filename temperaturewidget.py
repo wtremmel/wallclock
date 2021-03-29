@@ -7,6 +7,12 @@ import time
 
 
 class TemperatureWidget(Widget):
+    class Sensor:
+        def __init__(self,name,value):
+            self.name = name
+            self.value= value
+            self.update=time.time()
+            
     def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64,font=None):
         super(TemperatureWidget,self).__init__(x,y,color,size,width,height)
         if font:
@@ -16,6 +22,7 @@ class TemperatureWidget(Widget):
 
         self.lasttemp = None
         self.lastupdate = 0
+        self.sensors = {}
 
     def update(self,sensor=None, temperature=None):
         if temperature == None:
@@ -52,6 +59,20 @@ class TemperatureWidget(Widget):
         else:
             self.changed = False
 
+    def minimum(self,sensor=None,temperature=None):
+        t = float(temperature)
+        s = Sensor(sensor,t)
+        self.sensors[sensor] = s
+        # remove all too old readings and record the minimum
+        minimum = s
+        for x in iter(self.sensors):
+            if (x.update < time.time() - 5*60):
+                del self.sensors[x]
+            elif x.value < minimum.value:
+                minimum = x
+        self.update(minimum.name,minimum.value)
+
+        
 
 
 if __name__ == "__main__":
