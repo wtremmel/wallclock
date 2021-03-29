@@ -29,7 +29,7 @@ class TemperatureWidget(Widget):
         t = float(temperature)
         self.lastupdate = time.time()
         if (self.lasttemp != t):
-            tempStr = "{:2.1f}".format(t) + "C"
+            tempStr = "{:2.1f}".format(t)
             self.image = Image.new("RGBA",(self.width,self.height))
             if (t< 0):
                 self.color=(0,0,255)

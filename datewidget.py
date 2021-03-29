@@ -19,10 +19,11 @@ class DateWidget(Widget):
     def update(self):
         current_date = time.localtime()
         if (self.lastday != current_date.tm_mday):
-            date_string = time.strftime("%a %d.%m.",current_date)
+            weekday = time.strftime("%a",current_date)[0:2]
+            date_string = time.strftime("%d.%m.",current_date)
             self.image = Image.new("RGBA",(self.width,self.height))
             draw = ImageDraw.Draw(self.image)
-            draw.text((self.x,self.y),date_string,font=self.font,fill=self.color)
+            draw.text((self.x,self.y),weekday+date_string,font=self.font,fill=self.color)
             self.lastday = current_date.tm_mday
             self.changed = True
         else:

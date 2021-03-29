@@ -53,14 +53,15 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     mytime = TimeWidget(x=0,y=0,color=(0,255,0))
-    mydate= DateWidget(x=0,y=15,color=(128,128,255))
+    mydate= DateWidget(x=0,y=11,color=(128,128,255))
     mycountdown = CountdownWidget(x=0,y=13,size=13,bigat=10)
     myseconds = SecondsWidget(x=0,y=0,color=(100,100,0))
     gardentemp = TemperatureWidget(x = 45, y = 58, size = 7)
+    loggiatemp = TemperatureWidget(x = 22, y = 58, size = 7)
     vorgartentemp = TemperatureWidget(x = 0, y = 58, size = 7)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
-    astro = SunWidget(x=48,y=1,size=16)
-    allefenster = FensterWidget(x=62,y=17,size=2)
+    astro = SunWidget(x=46,y=1,size=18)
+    allefenster = FensterWidget(x=62,y=19,size=2)
 
     
     widgetlist = []
@@ -70,6 +71,7 @@ if __name__ == "__main__":
     widgetlist.append(myseconds)
     widgetlist.append(gardentemp)
     widgetlist.append(vorgartentemp)
+    widgetlist.append(loggiatemp)
     widgetlist.append(pingrouter)
     widgetlist.append(haustuerOffen)
     widgetlist.append(esKlingelt)
@@ -78,6 +80,7 @@ if __name__ == "__main__":
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
     client.subscribe("/Chattenweg5/Vorgarten/temperature",vorgartentemp.update)
+    client.subscribe("/Chattenweg5/2OG-Loggia/temperature",loggiatemp.update)
     client.subscribe("countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
