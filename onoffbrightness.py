@@ -14,7 +14,7 @@ class OnOffBrightness(Widget):
         self.changed = False
 
     def mqttlight(self,topic,msg):
-        if topic == None or msg == None:
+        if topic == None or msg == None or not self.someonehome:
             return
 
         light = int(round(float(msg.decode())))
@@ -31,7 +31,17 @@ class OnOffBrightness(Widget):
         print ("light = ",light," brightness = ",self.brightness)
 
     def mqtthome(self,topic,msg):
-        pass
+        if topic == None or msg == None:
+            return
+
+        residents = int(msg.decode())
+        if residents == 0:
+            self.someonehome = False
+            self.brightness = 0
+        elif residents >= 1:
+            self.someonehome = True
+        else:
+            print("Unknown value for "+topic+": "+residents)
 
     def update(self):
         pass
