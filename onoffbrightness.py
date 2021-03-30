@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 from widget import Widget
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 import time
+import subprocess
 
 
 class OnOffBrightness(Widget):
@@ -40,6 +41,8 @@ class OnOffBrightness(Widget):
             self.brightness = 0
             self.changed = True
             print("nobody home, turn off")
+            subprocess.run(["systemctl","stop","wallclock"])
+            sys.exit()
         elif residents >= 1:
             print("somebody home, turn on")
             self.someonehome = True
