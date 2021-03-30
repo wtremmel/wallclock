@@ -24,6 +24,7 @@ class MqttClient():
                 if re.match(k,msg.topic):
                     v(msg.topic,msg.payload)
         except:
+            print(msg.topic+":"+msg.payload)
             e = sys.exc_info()[0]
             print(e)
         
