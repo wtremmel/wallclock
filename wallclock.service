@@ -1,6 +1,6 @@
 [Unit]
 Description=Wallclock
-After=network.target
+After=systemd-timesyncd.service
 
 [Service]
 ExecStart=python3 /home/pi/wallclock/wallclock.py
