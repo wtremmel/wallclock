@@ -38,7 +38,10 @@ class OnOffBrightness(Widget):
         if residents == 0:
             self.someonehome = False
             self.brightness = 0
+            self.changed = True
+            print("nobody home, turn off")
         elif residents >= 1:
+            print("somebody home, turn on")
             self.someonehome = True
         else:
             print("Unknown value for "+topic+": "+residents)
