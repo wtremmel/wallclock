@@ -2,9 +2,10 @@
 
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from widget import Widget
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from threading import Timer
 import time
+import unicodedata
 
 class FrameAlert(Widget):
     def __init__(self,x=0,y=0,color=None,width=64,height=64):
@@ -66,6 +67,42 @@ class ImageAlert(Widget):
         if (self.ison and time.time() > self.onat + self.howlong):
             self.off()
             
+class UnicodeAlert(Widget):
+    def __init__(self,x=0,y=0,color=None,size=32,width=64,height=64,\
+            description=None,howlong=5):
+        super(UnicodeAlert,self).__init__(x,y,color,size,width,height)
+        self.alertimage = self.image.copy()
+        draw = ImageDraw.Draw(self.alertimage)
+        font = ImageFont.truetype("TwitterColorEmoji-SVGinOT.ttf",self.size)
+        self.description = description
+        self.ison = False
+        self.howlong = howlong
+        if description != None:
+            try:
+                t = unicodedata.lookup(description)
+            except KeyError:
+                print("symbol "+description+" not found")
+                t = None
+
+        if t == None:
+            return
+        draw.text((self.x,self.y),t,font=font,fill=self.color)
+
+    def off(self):
+        self.image = Image.new("RGBA",(self.width,self.height))
+        self.ison = False
+        self.changed = True
+
+    def on(self):
+        self.image = self.alertimage.copy()
+        self.ison = True
+        self.changed = True
+        self.onat = time.time()
+
+    def update(self):
+        if (self.ison and time.time() > self.onat + self.howlong):
+            self.off()
+
 
 if __name__ == "__main__":
     options = RGBMatrixOptions()
@@ -75,7 +112,7 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
 
     alertframe = FrameAlert()
-    alertimage = ImageAlert(filename="images/bell-64.png")
+    alertimage = UnicodeAlert(description="black telephone",size=32, color=(255,0,0))
     # alertframe.update(count=5,duration=0.1,pause=0.2)
 
     alertimage.on()
