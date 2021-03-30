@@ -5,6 +5,7 @@ import time
 from temperaturewidget import TemperatureWidget
 import paho.mqtt.client as mqtt
 import re
+import sys
 
 class MqttClient():
     def on_connect(self,client, userdata, flags, rc):
@@ -23,7 +24,12 @@ class MqttClient():
                 if re.match(k,msg.topic):
                     v(msg.topic,msg.payload)
         except:
-            print("other error")
+            e = sys.exc_info()[0]
+            print(e)
+        
+
+        # except:
+        #     print("other error")
 
     def subscribe(self,topic,function):
         self.client.subscribe(topic)

@@ -11,13 +11,14 @@ from mqttclient import MqttClient
 from temperaturewidget import TemperatureWidget
 from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
-from framealert import FrameAlert, ImageAlert
+from framealert import FrameAlert, ImageAlert, UnicodeAlert
 from fensterwidget import FensterWidget
 from onoffbrightness import OnOffBrightness
 import json
 
 haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
 esKlingelt = ImageAlert(y=32,howlong=10,filename="images/bell-64.png")
+telefon = UnicodeAlert(y=22, howlong=30, size=35,description="black telephone", color=(255,0,0))
 
 matrixBrightness = 100
 
@@ -42,6 +43,10 @@ def setBrightness(topic,msg):
     newBrightness = int(msg)
     if newBrightness >= 0 and newBrightness <= 255:
         matrixBrightness = int(msg)
+
+def dasTelefonKlingelt(topic,msg):
+    global telefon
+    telefon.on()
 
 if __name__ == "__main__":
     options = RGBMatrixOptions()
@@ -77,6 +82,7 @@ if __name__ == "__main__":
     widgetlist.append(loggiatemp)
     widgetlist.append(pingrouter)
     widgetlist.append(haustuerOffen)
+    widgetlist.append(telefon)
     widgetlist.append(esKlingelt)
     widgetlist.append(allefenster)
     widgetlist.append(aussentemperatur)
@@ -91,6 +97,7 @@ if __name__ == "__main__":
     client.subscribe("/Wallclock/Brightness",setBrightness)
     client.subscribe("/Chattenweg5/Fenster/#",allefenster.update)
     client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
+    client.subscribe("/Chattenweg5/Phone",dasTelefonKlingelt)
 
 
     while True:
