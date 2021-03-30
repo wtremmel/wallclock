@@ -15,20 +15,26 @@ class OnOffBrightness(Widget):
 
     def mqttlight(self,topic,msg):
         if topic == None or msg == None:
-            self.changed = False
             return
 
-        light = float(msg.decode())
-        print(topic,":",light)
+        light = int(round(float(msg.decode())))
 
-        if (ligth <= 0):
+        oldbrightness = self.brightness
+        self.brightness = light*3
+
+        if (self.brightness < 8):
             self.brightness = 8
+        elif self.brightness > 100:
+            self.brightness = 100
+
+        self.changed = (oldbrightness != self.brightness)
+        print ("light = ",light," brightness = ",self.brightness)
 
     def mqtthome(self,topic,msg):
         pass
 
     def update(self):
-        self.changed = False
+        pass
 
 
 if __name__ == "__main__":

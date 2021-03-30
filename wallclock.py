@@ -127,12 +127,17 @@ if __name__ == "__main__":
                 matrix.SetImage(im.convert("RGB"))
                 time.sleep(0.1)
 
+        if (setbrightness.changed):
+            matrix.brightness = setbrightness.brightness
+            setbrightness.changed=False
+            print("brightness = ",matrix.brightness)
+            change = True
+
         if change:
             im = Image.new("RGBA",(64,64))
             for w in widgetlist:
                 im.alpha_composite(w.image)
                 w.changed = False
-            matrix.brightness = matrixBrightness
             matrix.SetImage(im.convert("RGB"))
         time.sleep(0.5)
 
