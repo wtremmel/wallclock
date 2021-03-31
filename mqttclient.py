@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
 import time
-from temperaturewidget import TemperatureWidget
 import paho.mqtt.client as mqtt
 import re
 import sys
@@ -13,7 +11,7 @@ class MqttClient():
         topiclist = []
         for t in list(self.handler):
             topiclist.append((t,0))
-        client.subscribe(topiclist)
+        self.client.subscribe(topiclist)
 
     def on_message(self,client, userdata, msg):
         try:
@@ -24,47 +22,36 @@ class MqttClient():
                 if re.match(k,msg.topic):
                     v(msg.topic,msg.payload)
         except:
-            print(msg.topic+":"+msg.payload)
+            print(str(msg.topic)+":"+str(msg.payload))
             e = sys.exc_info()[0]
             print(e)
-        
 
-        # except:
-        #     print("other error")
+    def on_subscribe(self,client,userdata,mid,granted_qos):
+        pass
 
     def subscribe(self,topic,function):
-        self.client.subscribe(topic)
         s = re.sub('#','',topic)
         self.handler[s] = function
+        mid = self.client.subscribe(topic)
 
     def __init__(self,server):
-        self.client = mqtt.Client()
+        self.handler = {}
+        self.client = mqtt.Client(clean_session=True)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
+        self.client.on_subscribe = self.on_subscribe
         self.client.connect(server,1883,10)
         self.client.loop_start()
-        self.handler = {}
 
 
 if __name__ == "__main__":
-    options = RGBMatrixOptions()
-    options.rows = 64
-    options.cols = 64
-    options.hardware_mapping = "adafruit-hat-pwm"
-    options.pwm_bits = 8
 
-
-    matrix = RGBMatrix(options = options)
-
-    mytemp = TemperatureWidget(x=0,y=20)
-
-    client = MqttClient("pi3.garf.de")
-    client.subscribe("/Chattenweg5/Garten/temperature",mytemp)
+    def mytest(topic,msg):
+        print(topic+":"+str(msg))
+        
+    myclient = MqttClient("pi3.garf.de")
+    myclient.subscribe("/Chattenweg5/2OG-Flur/temperature",mytest)
+    myclient.subscribe("/Chattenweg5/2OG-Flur/humitiy",mytest)
 
     while True:
-        if mytemp.changed:
-            matrix.SetImage(mytemp.image.convert("RGB"))
-            mytemp.changed = False
-        time.sleep(0.5)
-
-
+        time.sleep(1)
