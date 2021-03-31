@@ -70,7 +70,7 @@ class CountdownWidget(Widget):
 
     def big(self):
         now = int(time.time())
-        seconds_left = self.endtime - now
+        seconds_left = int(self.endtime - now)
         if seconds_left < 0:
             self.running = False
             self.ended = True
