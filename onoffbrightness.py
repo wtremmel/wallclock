@@ -15,13 +15,13 @@ class OnOffBrightness(Widget):
         self.changed = False
 
     def mqttlight(self,topic,msg):
-        if topic == None or msg == None or not self.someonehome:
+        if topic == None or msg == None or self.somonehome == False:
             return
 
         light = int(round(float(msg.decode())))
 
         oldbrightness = self.brightness
-        self.brightness = light*3
+        self.brightness = light*4
 
         if (self.brightness < 8):
             self.brightness = 8
@@ -42,6 +42,7 @@ class OnOffBrightness(Widget):
             self.changed = True
             print("nobody home, turn off")
             subprocess.run(["systemctl","stop","wallclock"])
+            time.sleep(5)
             sys.exit()
         elif residents >= 1:
             print("somebody home, turn on")

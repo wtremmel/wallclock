@@ -41,7 +41,7 @@ class MqttClient():
         self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
-        self.client.connect(server,1883,60)
+        self.client.connect(server,1883,10)
         self.client.loop_start()
         self.handler = {}
 
