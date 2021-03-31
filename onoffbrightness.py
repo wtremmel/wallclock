@@ -41,6 +41,7 @@ class OnOffBrightness(Widget):
             self.brightness = 0
             self.changed = True
             print("nobody home, turn off")
+            subprocess.run(["systemctl","start","start-wallclock"])
             subprocess.run(["systemctl","stop","wallclock"])
             time.sleep(5)
             sys.exit()
