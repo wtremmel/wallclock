@@ -4,7 +4,7 @@ import time
 from mqttclient import MqttClient
 import subprocess
 
-someonehome = False
+someonehome = True
 
 def residentsMessage(topic,msg):
     global someonehome
