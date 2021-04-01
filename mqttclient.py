@@ -18,9 +18,13 @@ class MqttClient():
             handler = self.handler[msg.topic]
             handler(msg.topic,msg.payload)
         except KeyError:
+            found = False
             for k,v in self.handler.items():
                 if re.match(k,msg.topic):
                     v(msg.topic,msg.payload)
+                    found = True
+            if not found:
+                print("not found: ",msg.topic)
         except:
             print(str(msg.topic)+":"+str(msg.payload))
             e = sys.exc_info()[0]
