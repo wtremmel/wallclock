@@ -73,7 +73,6 @@ class FensterWidget(Widget):
                     if self.fensterliste[f] == 0:
                         fcolor = (0,255,0)
                     else:
-                        print (f," = ",self.fensterliste[f])
                         fcolor = (255,0,0)
                     draw.rectangle([
                         self.x,
