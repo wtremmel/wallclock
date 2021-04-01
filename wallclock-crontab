@@ -1,0 +1,4 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/home/pi/wallclock
+0 23 * * *   root    systemctl stop wallclock
+0 8 * * *   root    systemctl start wallclock
