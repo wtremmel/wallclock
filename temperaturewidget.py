@@ -31,7 +31,7 @@ class HumidityWidget(Widget):
         if (self.lasthum != h):
             humStr = "{:2d}".format(h) + "%"
             self.image = Image.new("RGBA",(self.width,self.height))
-            self.color=(0,100-h,100)
+            self.color=(0,200-h*2,255)
             draw = ImageDraw.Draw(self.image)
             draw.text((self.x,self.y),humStr,font=self.font,fill=self.color)
             self.lasthum = h
