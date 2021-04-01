@@ -5,6 +5,29 @@ from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 import re
 
+class MovementWidget(Widget):
+    class Sensor:
+        def __init__(self,sensor=None,floor=None):
+            self.lastmovement = 0
+            self.sensor = sensor
+            self.floor  = floor
+            
+    def __init__(self,x=0,y=0,color=(255,255,255),size=2,width=64,height=64):
+        super(MovementWidget,self).__init__(x,y,color,size,width,height)
+        self.sensors={}
+
+    def mqtthandler(self,topic=None, msg=None):
+        if topic == None or msg == None:
+            self.changed = False
+            return
+
+        hasmovement = int(msg.decode())
+        if hasmovement == 0:
+            self.changed = False
+            return
+
+        print("Movement at "+topic)
+
 
 class FensterWidget(Widget):
     def __init__(self,x=0,y=0,color=(255,255,255),size=2,width=64,height=64):
@@ -25,7 +48,7 @@ class FensterWidget(Widget):
             self.changed = False
             return
 
-        isopen = msg.decode()
+        isopen = int(msg.decode())
 
         found = re.search("/([a-zA-Z0-9_]+)$",topic)
         if found:
@@ -47,9 +70,10 @@ class FensterWidget(Widget):
             draw = ImageDraw.Draw(self.image)
             for s in self.stockwerke:
                 for f in self.fenster[s]:
-                    if self.fensterliste[f] == "0":
+                    if self.fensterliste[f] == 0:
                         fcolor = (0,255,0)
                     else:
+                        print (f," = ",self.fensterliste[f])
                         fcolor = (255,0,0)
                     draw.rectangle([
                         self.x,
