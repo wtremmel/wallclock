@@ -40,7 +40,7 @@ class SunWidget(Widget):
         # print("center=",center)
 
         if (self.elevation >= 0):
-            dr.ellipse(el,fill=(100,100,0),width=0)
+            dr.ellipse(el,fill=(255,255,0),width=0)
             bg.paste(su,(self.x,self.y))
         return bg
 
@@ -106,7 +106,7 @@ class SunWidget(Widget):
         go2 = golden_hour(self.location.observer,direction = SunDirection.RISING)
         if (now >= go1[0] and now <= go1[1]) or (now >= go2[0] and now <= go2[1]):
             print("golden hour")
-            dr.rectangle(rect,fill=(90,60,0),outline=outline)
+            dr.rectangle(rect,fill=(180,120,0),outline=outline)
             return bg
 
         da = daylight(self.location.observer)
