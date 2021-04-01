@@ -109,6 +109,11 @@ class SunWidget(Widget):
             dr.rectangle(rect,fill=(90,60,0),outline=outline)
             return bg
 
+        da = daylight(self.location.observer)
+        if (now >= da[0] and now <= da[1]):
+            dr.rectangle(rect,fill=(30,80,150),outline=outline)
+            return bg
+
         ni = night(self.location.observer)
         if (now >= ni[0] and now <= ni[1]):
             dr.rectangle(rect,fill=(0,0,5),outline=outline)
@@ -118,11 +123,7 @@ class SunWidget(Widget):
                 starbri= random.randrange(5,50)
                 dr.point([starx,stary],fill=(starbri,starbri,starbri))
             return bg
-
-        da = daylight(self.location.observer)
-        if (now >= da[0] and now <= da[1]):
-            dr.rectangle(rect,fill=(30,80,150),outline=outline)
-            return bg
+        return bg # so always something is returned
 
 
 
