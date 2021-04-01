@@ -5,6 +5,53 @@ from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 import time
 
+class HumidityWidget(Widget):
+    def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64,font=None):
+        super(TemperatureWidget,self).__init__(x,y,color,size,width,height)
+        if font:
+            self.font = ImageFont.load("fonts/"+font)
+        else:
+            self.font = ImageFont.load("fonts/"+self.size2font(size))
+
+        self.lasthum = None
+        self.lastupdate = 0
+        self.sensors = {}
+
+    def update(self,sensor=None, humidity=None):
+        if humidity == None:
+            if (time.time() - self.lastupdate > 60*5):
+                self.image = Image.new("RGBA",(self.width,self.height))
+                self.lastupdate = time.time()
+                self.changed = True
+            else:
+                self.changed = False
+            return
+        h = int(humidity)
+        self.lastupdate = time.time()
+        if (self.lasthum != h):
+            humStr = "{:3d}".format(h)
+            self.image = Image.new("RGBA",(self.width,self.height))
+            if (t< 10):
+                self.color=(128,128,255)
+            elif (t< 30):
+                self.color=(64,64,255)
+            elif (t< 40):
+                self.color=(32,32,255)
+            elif (t< 50):
+                self.color=(0,64,255)
+            elif (t< 70):
+                self.color=(0,32,0)
+            elif (t< 30):
+                self.color=(255,64,0)
+            else:
+                self.color=(255,0,0)
+            draw = ImageDraw.Draw(self.image)
+            draw.text((self.x,self.y),tempStr,font=self.font,fill=self.color)
+            self.lasttemp = t
+            self.changed = True
+        else:
+            self.changed = False
+
 
 class TemperatureWidget(Widget):
     class Sensor:
