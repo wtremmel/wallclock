@@ -58,6 +58,7 @@ class FensterWidget(Widget):
             fenster = found.group(1)
         else:
             self.changed = False
+            print("window not found:",topic)
             return
 
         try:
