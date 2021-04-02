@@ -44,7 +44,7 @@ class FensterWidget(Widget):
         self.fenster[2] = ("Arbeitszimmer_Balkontuer","Arbeitszimmer_Dachfenster","Bad2_Fenster")
         for s in self.stockwerke:
             for f in self.fenster[s]:
-                self.fensterliste[f] = 0
+                self.fensterliste[f] = 9
 
     def update(self, topic=None, msg=None):
         if topic == None or msg == None:
