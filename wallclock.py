@@ -103,7 +103,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
-    client.subscribeRegex("/Chattenweg5/Fenster/#","/Chattenweg5/Fenster/",allefenster.update)
+    client.subscribeRegex("/Chattenweg5/Fenster/#","/Chattenweg5/Fenster/.*",allefenster.update)
     client.subscribeRegex("/Chattenweg5/+/motion","Chattenweg5/.*/motion",motion.mqtthandler)
     client.subscribe("/Chattenweg5/Wohnzimmer/light",setbrightness.mqttlight)
     client.subscribe("/Chattenweg5/Residents",setbrightness.mqtthome)
