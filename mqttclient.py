@@ -14,29 +14,24 @@ class MqttClient():
         self.client.subscribe(topiclist)
 
     def on_message(self,client, userdata, msg):
-        try:
-            handler = self.handler[msg.topic]
-            handler(msg.topic,msg.payload)
-        except KeyError:
-            found = False
-            for k,v in self.handler.items():
-                if re.match(k,msg.topic):
-                    v(msg.topic,msg.payload)
-                    found = True
-            if not found:
-                print("not found: ",msg.topic)
-        except:
-            print(str(msg.topic)+":"+str(msg.payload))
-            e = sys.exc_info()[0]
-            print(e)
+        found = False
+        for topic,v in self.handler.items():
+            if re.match(v[0],msg.topic):
+                v[1](msg.topic,msg.payload)
+                found = True
+        if not found:
+            print("not found: ",msg.topic)
 
     def on_subscribe(self,client,userdata,mid,granted_qos):
         pass
 
-    def subscribe(self,topic,function):
-        s = re.sub('#','',topic)
-        self.handler[s] = function
-        mid = self.client.subscribe(topic)
+    def subscribe(self,topic=None,function=None):
+        self.handler[topic] = (topic,function)
+        self.client.subscribe(topic)
+
+    def subscribeRegex(self,topic=None,regex=None,function=None):
+        self.handler[topic] = (regex,function)
+        self.client.subscribe(topic)
 
     def __init__(self,server):
         self.handler = {}
