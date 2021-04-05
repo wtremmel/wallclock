@@ -19,6 +19,7 @@ import json
 haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
 esKlingelt = ImageAlert(y=32,howlong=10,filename="images/bell-64.png")
 telefon = UnicodeAlert(y=22, howlong=30, size=35,description="black telephone", color=(255,0,0))
+esRegnet = UnicodeAlert(y=22, howlong=600, size=27,description="CLOUD WITH RAIN", color=(0,96,255))
 
 matrixBrightness = 100
 
@@ -47,6 +48,17 @@ def setBrightness(topic,msg):
 def dasTelefonKlingelt(topic,msg):
     global telefon
     telefon.on()
+    
+def regenAlert(topic,msg):
+    global esRegnet
+
+    v = int(msg.decode())
+    print(topic,":",v)
+    if v > 15000:
+        esRegnet.on()
+    else:
+        esRegnet.off()
+
 
 if __name__ == "__main__":
     options = RGBMatrixOptions()
@@ -89,12 +101,14 @@ if __name__ == "__main__":
     widgetlist.append(haustuerOffen)
     widgetlist.append(telefon)
     widgetlist.append(esKlingelt)
+    widgetlist.append(esRegnet)
     widgetlist.append(allefenster)
     widgetlist.append(motion)
     widgetlist.append(aussentemperatur)
 
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
+    client.subscribe("/Chattenweg5/Garten/rain",regenAlert)
     client.subscribe("/Chattenweg5/Vorgarten/temperature",vorgartentemp.update)
     client.subscribe("/Chattenweg5/Wohnzimmer/temperature",arbeitszimmertemp.update)
     client.subscribe("/Chattenweg5/Wohnzimmer/humidity",arbeitszimmerhum.update)
