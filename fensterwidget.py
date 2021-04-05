@@ -26,7 +26,10 @@ class MovementWidget(Widget):
             self.changed = False
             return
 
-        print("Movement at "+topic)
+        found = re.search("/Chattenweg5/([^/]+/",topic)
+        if found:
+            print("Movement at "+found.group(1))
+
 
     def update(self):
         pass
