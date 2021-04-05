@@ -53,7 +53,6 @@ def regenAlert(topic,msg):
     global esRegnet
 
     v = int(msg.decode())
-    print(topic,":",v)
     if v > 15000:
         esRegnet.on()
     else:
