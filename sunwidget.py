@@ -83,7 +83,7 @@ class SunWidget(Widget):
         bg = Image.new("RGBA",(self.width,self.height))
         dr = ImageDraw.Draw(bg)
         rect = [self.x,self.y,self.x+self.size-1,self.y+self.size-1]
-        outline = (100,100,100)
+        outline = (200,200,200)
 
         if now == None:
             now = datetime.datetime.now(datetime.timezone.utc)
@@ -120,7 +120,7 @@ class SunWidget(Widget):
             for i in range(20):
                 starx = random.randrange(self.x+1,self.x+self.size-2)
                 stary = random.randrange(self.y+1,self.y+self.size-2)
-                starbri= random.randrange(5,50)
+                starbri= random.randrange(20,255)
                 dr.point([starx,stary],fill=(starbri,starbri,starbri))
             return bg
         return bg # so always something is returned
