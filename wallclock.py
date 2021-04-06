@@ -14,6 +14,7 @@ from pingwidget import PingWidget
 from framealert import FrameAlert, ImageAlert, UnicodeAlert
 from fensterwidget import FensterWidget, MovementWidget
 from onoffbrightness import OnOffBrightness
+from house import House
 import json
 
 haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
@@ -66,8 +67,43 @@ if __name__ == "__main__":
     options.hardware_mapping = "adafruit-hat-pwm"
     options.pwm_bits = 7
     options.drop_privileges = False
-
     matrix = RGBMatrix(options = options)
+
+    ch5 = House()
+    ch5.addFloor("2.OG",2)
+    ch5.addFloor("1.OG",1)
+    ch5.addFloor("EG",0)
+    ch5.addFloor("Keller",-1)
+    ch5.addFloor("Aussen",-2)
+
+    ch5.addRoom("Arbeitszimmer","2.OG")
+    ch5.addRoom("Bad2","2.OG")
+    ch5.addRoom("Loggia","2.OG")
+    ch5.addRoom("RaspiBox","2.OG")
+    ch5.addRoom("3DPrinter","2.OG")
+    ch5.addRoom("2OG-Loggia","2.OG")
+    ch5.addRoom("2OG-Flur","2.OG")
+    
+    ch5.addRoom("1OG-Flur","1.OG")
+    ch5.addRoom("Schlafzimmer","1.OG")
+    ch5.addRoom("Bad1","1.OG")
+    ch5.addRoom("Ankleidezimmer","1.OG")
+
+    ch5.addRoom("Wohnzimmer","EG")
+    ch5.addRoom("Mobile","EG")
+    ch5.addRoom("Kueche","EG")
+    ch5.addRoom("Fenster","EG")
+    ch5.addRoom("EG-Flur","EG")
+    
+    ch5.addRoom("Heizraum","Keller")
+    ch5.addRoom("Keller","Keller")
+    ch5.addRoom("Kellerabgang","Keller")
+    ch5.addRoom("Fernsehzimmer","Keller")
+    ch5.addRoom("Keller-Flur","Keller")
+    ch5.addRoom("Hausanschlussraum","Keller")
+
+    ch5.addRoom("Garten","Aussen")
+    ch5.addRoom("Vorgarten","Aussen")
 
     mytime = TimeWidget(x=0,y=0,color=(0,255,0))
     mydate= DateWidget(x=0,y=11,color=(128,128,255))
@@ -121,6 +157,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
     client.subscribe("/Chattenweg5/Residents",setbrightness.mqtthome)
     client.subscribe("/Chattenweg5/Phone",dasTelefonKlingelt)
+    client.subscribeRegex("/Chattenweg5/#","/Chattenweg5/.*",ch5.mqtthandler)
 
 
     while True:
