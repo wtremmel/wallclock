@@ -118,7 +118,7 @@ if __name__ == "__main__":
     client.subscribe("/Wallclock/Brightness",setBrightness)
     client.subscribeRegex("/Chattenweg5/Fenster/#","/Chattenweg5/Fenster/.*",allefenster.update)
     client.subscribeRegex("/Chattenweg5/+/motion","/Chattenweg5/.*/motion",motion.mqtthandler)
-    client.subscribe("/Chattenweg5/Wohnzimmer/light",setbrightness.mqttlight)
+    client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
     client.subscribe("/Chattenweg5/Residents",setbrightness.mqtthome)
     client.subscribe("/Chattenweg5/Phone",dasTelefonKlingelt)
 
