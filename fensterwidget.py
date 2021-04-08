@@ -3,6 +3,7 @@
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
+from house import House
 import re
 
 class MovementWidget(Widget):
@@ -97,6 +98,42 @@ if __name__ == "__main__":
     options.rows = 64
     options.cols = 64
 
+    ch5 = House()
+    ch5.addFloor("2.OG",2)
+    ch5.addFloor("1.OG",1)
+    ch5.addFloor("EG",0)
+    ch5.addFloor("Keller",-1)
+    ch5.addFloor("Aussen",-2)
+
+    ch5.addRoom("Arbeitszimmer","2.OG")
+    ch5.addRoom("Bad2","2.OG")
+    ch5.addRoom("Loggia","2.OG")
+    ch5.addRoom("RaspiBox","2.OG")
+    ch5.addRoom("3DPrinter","2.OG")
+    ch5.addRoom("2OG-Loggia","2.OG")
+    ch5.addRoom("2OG-Flur","2.OG")
+
+    ch5.addRoom("1OG-Flur","1.OG")
+    ch5.addRoom("Schlafzimmer","1.OG")
+    ch5.addRoom("Bad1","1.OG")
+    ch5.addRoom("Ankleidezimmer","1.OG")
+
+    ch5.addRoom("Wohnzimmer","EG")
+    ch5.addRoom("Mobile","EG")
+    ch5.addRoom("Kueche","EG")
+    ch5.addRoom("Fenster","EG")
+    ch5.addRoom("EG-Flur","EG")
+
+    ch5.addRoom("Heizraum","Keller")
+    ch5.addRoom("Keller","Keller")
+    ch5.addRoom("Kellerabgang","Keller")
+    ch5.addRoom("Fernsehzimmer","Keller")
+    ch5.addRoom("Keller-Flur","Keller")
+    ch5.addRoom("Hausanschlussraum","Keller")
+
+    ch5.addRoom("Garten","Aussen")
+    ch5.addRoom("Vorgarten","Aussen")
+
     matrix = RGBMatrix(options = options)
 
     u = FensterWidget(x=60,y=18,size=2)
@@ -110,9 +147,12 @@ if __name__ == "__main__":
     u.update("/Chattenweg5/Fenster/WZ_Fenster",b'0')
     u.update("/Chattenweg5/Fenster/WZ_Fenster_R",b'0')
     u.update("/Chattenweg5/Fenster/rg_Fenster",b'0')
+
+    m = MovementWidget(x=58,y=18,size=2)
+    # m.mqtthandler("/Chattenweg5/EG-Flur/Movement",b"1")
     while True:
-        if (u.changed):
-            matrix.SetImage(u.image.convert("RGB"))
+        if (m.changed):
+            matrix.SetImage(m.image.convert("RGB"))
         
 
 
