@@ -52,12 +52,17 @@ def dasTelefonKlingelt(topic,msg):
     
 def regenAlert(topic,msg):
     global esRegnet
-
     v = int(msg.decode())
     if v > 15000:
         esRegnet.on()
     else:
         esRegnet.off()
+
+def regenTropfen(topic,msg):
+    global esRegnet
+    v = int(msg.decode())
+    if v >= 1:
+        esRegnet.on()
 
 
 if __name__ == "__main__":
@@ -144,6 +149,7 @@ if __name__ == "__main__":
     client = MqttClient("pi3.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
     client.subscribe("/Chattenweg5/Garten/rain",regenAlert)
+    client.subscribe("/Chattenweg5/2OG-Loggia/raindrops",regenTropfen)
     client.subscribe("/Chattenweg5/Vorgarten/temperature",vorgartentemp.update)
     client.subscribe("/Chattenweg5/Arbeitszimmer/temperature",arbeitszimmertemp.update)
     client.subscribe("/Chattenweg5/Arbeitszimmer/humidity",arbeitszimmerhum.update)
