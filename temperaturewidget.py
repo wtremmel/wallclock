@@ -5,6 +5,39 @@ from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 import time
 
+class AirQualityWidget(Widget):
+    def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64,font=None):
+        super(AirQualityWidget,self).__init__(x,y,color,size,width,height)
+        if font:
+            self.font = ImageFont.load("fonts/"+font)
+        else:
+            self.font = ImageFont.load("fonts/"+self.size2font(size))
+
+        self.lastqual = None
+        self.lastupdate = 0
+        self.sensors = {}
+
+    def update(self,sensor=None, airquality=None):
+        if airquality == None:
+            if (time.time() - self.lastupdate > 60*5):
+                self.image = Image.new("RGBA",(self.width,self.height))
+                self.lastupdate = time.time()
+                self.changed = True
+            else:
+                self.changed = False
+            return
+        q = int(float(airquality.decode()))
+        self.lastupdate = time.time()
+        if (self.lastqual != q):
+            qualStr = "{:4d}".format(h) + "ppm"
+            self.image = Image.new("RGBA",(self.width,self.height))
+            draw = ImageDraw.Draw(self.image)
+            draw.text((self.x,self.y),qualStr,font=self.font,fill=self.color)
+            self.lastqual = h
+            self.changed = True
+        else:
+            self.changed = False
+
 class HumidityWidget(Widget):
     def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64,font=None):
         super(HumidityWidget,self).__init__(x,y,color,size,width,height)
