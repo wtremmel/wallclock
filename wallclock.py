@@ -8,7 +8,7 @@ from secondswidget import SecondsWidget
 from datewidget import DateWidget
 from sunwidget import SunWidget
 from mqttclient import MqttClient
-from temperaturewidget import TemperatureWidget, HumidityWidget
+from temperaturewidget import TemperatureWidget, HumidityWidget, AirQualityWidget
 from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
 from framealert import FrameAlert, ImageAlert, UnicodeAlert
@@ -119,6 +119,7 @@ if __name__ == "__main__":
     vorgartentemp = TemperatureWidget(x = 0, y = 58, size = 7)
     arbeitszimmertemp = TemperatureWidget(x = 0, y = 50, size = 7)
     arbeitszimmerhum = HumidityWidget(x = 20, y = 50, size = 7)
+    arbeitszimmerqual = AirQualityWidget(x = 30, y = 50, size = 7)
     pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
     astro = SunWidget(x=46,y=1,size=18)
     allefenster = FensterWidget(x=62,y=19,size=2)
@@ -136,6 +137,7 @@ if __name__ == "__main__":
     widgetlist.append(vorgartentemp)
     widgetlist.append(arbeitszimmertemp)
     widgetlist.append(arbeitszimmerhum)
+    widgetlist.append(arbeitszimmerqual)
     widgetlist.append(loggiatemp)
     widgetlist.append(pingrouter)
     widgetlist.append(haustuerOffen)
@@ -153,6 +155,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/Vorgarten/temperature",vorgartentemp.update)
     client.subscribe("/Chattenweg5/Arbeitszimmer/temperature",arbeitszimmertemp.update)
     client.subscribe("/Chattenweg5/Arbeitszimmer/humidity",arbeitszimmerhum.update)
+    client.subscribe("/Chattenweg5/Arbeitszimmer/airquality",arbeitszimmerqual.update)
     client.subscribe("/Chattenweg5/2OG-Loggia/temperature",loggiatemp.update)
     client.subscribe("/Wallclock/Countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)

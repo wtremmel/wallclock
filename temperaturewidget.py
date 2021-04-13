@@ -29,11 +29,17 @@ class AirQualityWidget(Widget):
         q = int(float(airquality.decode()))
         self.lastupdate = time.time()
         if (self.lastqual != q):
-            qualStr = "{:4d}".format(h) + "ppm"
+            qualStr = "{:4d}".format(q) + "ppm"
             self.image = Image.new("RGBA",(self.width,self.height))
             draw = ImageDraw.Draw(self.image)
+            if q <= 1000:
+                self.color = (0,255,0)
+            elif q <= 2000:
+                self.color = (255,255,0)
+            else:
+                self.color = (255,0,0)
             draw.text((self.x,self.y),qualStr,font=self.font,fill=self.color)
-            self.lastqual = h
+            self.lastqual = q
             self.changed = True
         else:
             self.changed = False
