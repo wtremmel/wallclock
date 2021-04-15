@@ -158,6 +158,7 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/Arbeitszimmer/CO2",arbeitszimmerqual.update)
     client.subscribe("/Chattenweg5/2OG-Loggia/temperature",loggiatemp.update)
     client.subscribe("/Wallclock/Countdown",mycountdown.mqttstart)
+    client.subscribe("/Chattenweg5/Wallclock/Countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
