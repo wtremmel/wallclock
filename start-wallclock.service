@@ -5,5 +5,5 @@ Description=Wallclock Starter
 ExecStart=python3 /home/pi/wallclock/start-wallclock.py
 Type=exec
 WorkingDirectory=/home/pi/wallclock
-Restart=no
+Restart=on-failure
 
