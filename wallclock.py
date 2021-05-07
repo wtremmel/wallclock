@@ -158,7 +158,9 @@ if __name__ == "__main__":
     client.subscribe("/Chattenweg5/Arbeitszimmer/CO2",arbeitszimmerqual.update)
     client.subscribe("/Chattenweg5/2OG-Loggia/temperature",loggiatemp.update)
     client.subscribe("/Wallclock/Countdown",mycountdown.mqttstart)
+    client.subscribe("/Wallclock/countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/Wallclock/Countdown",mycountdown.mqttstart)
+    client.subscribe("/Chattenweg5/Wallclock/countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
     client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
@@ -181,17 +183,17 @@ if __name__ == "__main__":
         if mycountdown.started:
             mycountdown.started = False
             try:
-                widgetlist.remove(mydate)
+                # widgetlist.remove(mydate)
                 widgetlist.append(mycountdown)
             except ValueError:
                 pass
         elif mycountdown.cancelled:
             mycountdown.cancelled = False
-            widgetlist.append(mydate)
+            # widgetlist.append(mydate)
             widgetlist.remove(mycountdown)
         elif mycountdown.ended:
             mycountdown.ended = False
-            widgetlist.append(mydate)
+            # widgetlist.append(mydate)
             widgetlist.remove(mycountdown)
             flasher = FrameAlert()
             for i in range(5):
