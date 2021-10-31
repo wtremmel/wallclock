@@ -1,12 +1,12 @@
 [Unit]
 Description=Wallclock
-After=time-sync.target network.target
+After=multi-user.target
 
 [Service]
 ExecStart=python3 /home/pi/wallclock/wallclock.py
-Type=exec
+Type=idle
 WorkingDirectory=/home/pi/wallclock
 Restart=no
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
