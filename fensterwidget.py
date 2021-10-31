@@ -22,7 +22,11 @@ class MovementWidget(Widget):
             self.changed = False
             return
 
-        hasmovement = int(msg.decode())
+        thisMessage = msg.decode()
+        if thisMessage == "noMotion":
+            hasmovement = 0
+        else:
+            hasmovement = int(msg.decode())
         if hasmovement == 0:
             self.changed = False
             return
