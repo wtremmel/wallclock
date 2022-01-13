@@ -33,7 +33,7 @@ def motionMessage(topic,msg):
 
 if __name__ == "__main__":
 
-    client = MqttClient("pi3.garf.de")
+    client = MqttClient("pi3.ch5.garf.de")
     client.subscribe("/Chattenweg5/Residents",residentsMessage)
     client.subscribe("/Chattenweg5/2OG-Flur/motion",motionMessage)
 

@@ -48,7 +48,7 @@ if __name__ == "__main__":
     def mytest(topic,msg):
         print(topic+":"+str(msg))
         
-    myclient = MqttClient("pi3.garf.de")
+    myclient = MqttClient("pi3.ch5.garf.de")
     myclient.subscribe("/Chattenweg5/2OG-Flur/temperature",mytest)
     myclient.subscribe("/Chattenweg5/2OG-Flur/humitiy",mytest)
 
