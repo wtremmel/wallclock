@@ -120,7 +120,7 @@ if __name__ == "__main__":
     arbeitszimmertemp = TemperatureWidget(x = 0, y = 50, size = 7)
     arbeitszimmerhum = HumidityWidget(x = 20, y = 50, size = 7)
     arbeitszimmerqual = AirQualityWidget(x = 30, y = 50, size = 7)
-    pingrouter = PingWidget(x=0,y=63,target="192.168.1.254",every=30,color=(0,0,0))
+    pingrouter = PingWidget(x=0,y=63,target="fw01.ch5.garf.de",every=30,color=(0,0,0))
     astro = SunWidget(x=46,y=1,size=18)
     allefenster = FensterWidget(x=62,y=19,size=2)
     motion = MovementWidget(x=60,y=19,size=2)
