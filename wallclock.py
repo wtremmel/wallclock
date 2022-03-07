@@ -148,7 +148,7 @@ if __name__ == "__main__":
     widgetlist.append(motion)
     widgetlist.append(aussentemperatur)
 
-    client = MqttClient("pi3.ch5.garf.de")
+    client = MqttClient("mqtt.ch5.garf.de")
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
     client.subscribe("/Chattenweg5/Garten/rain",regenAlert)
     client.subscribe("/Chattenweg5/2OG-Loggia/raindrops",regenTropfen)
