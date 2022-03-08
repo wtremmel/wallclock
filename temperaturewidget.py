@@ -125,10 +125,13 @@ class TemperatureWidget(Widget):
                 self.color=(255,64,0)
             else:
                 self.color=(255,0,0)
-            draw = ImageDraw.Draw(self.image)
-            draw.text((self.x,self.y),tempStr,font=self.font,fill=self.color)
-            self.lasttemp = t
-            self.changed = True
+            if (t > -20):
+                draw = ImageDraw.Draw(self.image)
+                draw.text((self.x,self.y),tempStr,font=self.font,fill=self.color)
+                self.lasttemp = t
+                self.changed = True
+            else:
+                self.changed = False
         else:
             self.changed = False
 
