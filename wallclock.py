@@ -27,18 +27,11 @@ matrixBrightness = 100
 
 def tuerklingelAlert(topic,msg):
     global esKligelt
-    # /Chattenweg5/zigbee2mqtt/Tuerklingel {"battery":100,"contact":true,"linkquality":78,"voltage":3015}
-    x = json.loads(msg)
-    contact = x["contact"]
-    if contact == False:
-        esKlingelt.on()
+    esKlingelt.on()
 
 def haustuerAlert(topic,msg):
     global haustuerOffen
-    x = json.loads(msg)
-    contact = x["contact"]
-    if contact == False:
-        haustuerOffen.on()
+    haustuerOffen.on()
 
 def setBrightness(topic,msg):
     global matrixBrightness
@@ -161,10 +154,10 @@ if __name__ == "__main__":
     client.subscribe("/Wallclock/countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/Wallclock/Countdown",mycountdown.mqttstart)
     client.subscribe("/Chattenweg5/Wallclock/countdown",mycountdown.mqttstart)
-    client.subscribe("/Chattenweg5/zigbee2mqtt/Tuerklingel",tuerklingelAlert)
-    client.subscribe("/Chattenweg5/zigbee2mqtt/Haustuer",haustuerAlert)
+    client.subscribe("Chattenweg5/Tuerklingel",tuerklingelAlert)
+    client.subscribe("Chattenweg5/Fenster/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
-    client.subscribeRegex("/Chattenweg5/Fenster/#","/Chattenweg5/Fenster/.*",allefenster.update)
+    client.subscribeRegex("Chattenweg5/Fenster/#","Chattenweg5/Fenster/.*",allefenster.update)
     client.subscribeRegex("/Chattenweg5/+/motion","/Chattenweg5/.*/motion",motion.mqtthandler)
     client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
     client.subscribe("/Chattenweg5/Residents",setbrightness.mqtthome)
