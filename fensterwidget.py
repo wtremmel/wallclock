@@ -59,7 +59,10 @@ class FensterWidget(Widget):
             self.changed = False
             return
 
-        isopen = int(msg.decode())
+        try:
+            isopen = int(msg.decode())
+        except:
+            isopen = (msg.decode() == "open")
 
         found = re.search("/([a-zA-Z0-9_]+)$",topic)
         if found:
