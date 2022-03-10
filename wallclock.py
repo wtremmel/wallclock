@@ -161,7 +161,7 @@ if __name__ == "__main__":
     client.subscribeRegex("/Chattenweg5/+/motion","/Chattenweg5/.*/motion",motion.mqtthandler)
     client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
     client.subscribe("/Chattenweg5/Residents",setbrightness.mqtthome)
-    client.subscribe("/Chattenweg5/Phone",dasTelefonKlingelt)
+    client.subscribe("Chattenweg5/Phone",dasTelefonKlingelt)
     client.subscribeRegex("/Chattenweg5/#","/Chattenweg5/.*",ch5.mqtthandler)
 
 
