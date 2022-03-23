@@ -98,6 +98,10 @@ class TemperatureWidget(Widget):
         self.sensors = {}
 
     def update(self,sensor=None, temperature=None):
+        try:
+            t = float(temperature)
+        except:
+            temperature = None
         if temperature == None:
             if (time.time() - self.lastupdate > 60*5):
                 self.image = Image.new("RGBA",(self.width,self.height))
@@ -106,7 +110,6 @@ class TemperatureWidget(Widget):
             else:
                 self.changed = False
             return
-        t = float(temperature)
         self.lastupdate = time.time()
         if (self.lasttemp != t):
             tempStr = "{:2.1f}".format(t)
