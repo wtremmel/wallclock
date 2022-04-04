@@ -4,6 +4,7 @@ import time
 import paho.mqtt.client as mqtt
 import re
 import sys
+import configparser
 
 class MqttClient():
     def on_connect(self,client, userdata, flags, rc):
@@ -33,14 +34,17 @@ class MqttClient():
         self.handler[topic] = (regex,function)
         self.client.subscribe(topic)
 
-    def __init__(self,server):
+    def __init__(self):
         self.handler = {}
+        config = configparser.ConfigParser()
+        config.read('wallclock.conf')
+        self.config = config['mqtt']
         self.client = mqtt.Client(clean_session=True)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.on_subscribe = self.on_subscribe
-        self.client.username_pw_set("panelpi",password="panelpi")
-        self.client.connect(server,1883,10)
+        self.client.username_pw_set(self.config['user'],password=self.config['password'])
+        self.client.connect(self.config['host'],int(self.config['port']),10)
         self.client.loop_start()
 
 
@@ -49,7 +53,7 @@ if __name__ == "__main__":
     def mytest(topic,msg):
         print(topic+":"+str(msg))
         
-    myclient = MqttClient("mqtt.ch5.garf.de")
+    myclient = MqttClient()
     myclient.subscribe("/Chattenweg5/2OG-Flur/temperature",mytest)
     myclient.subscribe("/Chattenweg5/2OG-Flur/humitiy",mytest)
 
