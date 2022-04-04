@@ -1,6 +1,7 @@
 
 from requests import get
 import configparser
+import json
 
 
 class HomeAssistant():
@@ -9,18 +10,25 @@ class HomeAssistant():
         config.read('wallclock.conf')
         self.config = config['HomeAssistant']
         self.header = { 
-                "Authorization": self.config["token"],
+                "Authorization": "Bearer " + self.config["token"],
                 "content-type": "application/json"
                 }
 
 
     def getState(self,statename):
         url = self.config['url'] + "states/" + statename
-        print(url)
-        return get(url,self.header)
+        response = get(url,headers=self.header)
+        entities = response.json()
+        return entities
+
+    def getStates(self):
+        response = get(self.config['url'] + "states", headers=self.header)
+        print(response)
+        entities = response.json()
+        print(entities)
 
 
 if __name__ == "__main__":
     m = HomeAssistant()
-    ret = m.getState("arbeitszimmer_temperatur_2")
-    print(ret)
+    r = m.getState("binary_sensor.fenster_bad1_state")
+    print(r)
