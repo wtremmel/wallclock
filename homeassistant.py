@@ -30,5 +30,10 @@ class HomeAssistant():
 
 if __name__ == "__main__":
     m = HomeAssistant()
-    r = m.getState("binary_sensor.fenster_bad1_state")
-    print(r)
+    r = m.getState("binary_sensor.allefenster")
+
+    print(r['attributes']['entity_id'])
+    for window in r['attributes']['entity_id']:
+        print(window)
+        w = m.getState(window)
+        print(w['state'])
