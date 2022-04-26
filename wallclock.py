@@ -17,8 +17,8 @@ from onoffbrightness import OnOffBrightness
 from house import House
 import json
 
-haustuerOffen = ImageAlert(y=32,howlong=30,filename="images/door-5-64.png")
-esKlingelt = ImageAlert(y=32,howlong=10,filename="images/bell-64.png")
+haustuerOffen = ImageAlert(y=22,howlong=30,filename="images/door-5-64.png")
+esKlingelt = ImageAlert(y=22,howlong=10,filename="images/bell-64.png")
 telefon = UnicodeAlert(y=22, howlong=30, size=35,description="black telephone", color=(255,0,0))
 esRegnet = UnicodeAlert(y=22, howlong=600, size=24,description="CLOUD WITH RAIN", color=(0,96,255))
 
@@ -157,7 +157,6 @@ if __name__ == "__main__":
     client.subscribe("Chattenweg5/Tuerklingel",tuerklingelAlert)
     client.subscribe("Chattenweg5/Fenster/Haustuer",haustuerAlert)
     client.subscribe("/Wallclock/Brightness",setBrightness)
-    client.subscribeRegex("Chattenweg5/Fenster/#","Chattenweg5/Fenster/.*",allefenster.update)
     client.subscribeRegex("/Chattenweg5/+/motion","/Chattenweg5/.*/motion",motion.mqtthandler)
     client.subscribe("/Chattenweg5/Arbeitszimmer/light",setbrightness.mqttlight)
     client.subscribe("/Chattenweg5/Residents",setbrightness.mqtthome)
