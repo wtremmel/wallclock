@@ -56,7 +56,7 @@ def regenTropfen(topic,msg):
     v = float(msg.decode())
     if v > 0.0:
         esRegnet.on()
-    if v == 0.0:
+    else:
         esRegnet.off()
 
 
@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
     client = MqttClient()
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)
-    client.subscribe("/Chattenweg5/Garten/rain",regenAlert)
+    # client.subscribe("/Chattenweg5/Garten/rain",regenAlert)
     client.subscribe("/Chattenweg5/2OG-Loggia/sensor/sensor/rain_intensity/state",regenTropfen)
     client.subscribe("/Chattenweg5/Vorgarten/temperature",vorgartentemp.update)
     client.subscribe("/Chattenweg5/Arbeitszimmer/temperature",arbeitszimmertemp.update)
