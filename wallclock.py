@@ -8,7 +8,7 @@ from secondswidget import SecondsWidget
 from datewidget import DateWidget
 from sunwidget import SunWidget
 from mqttclient import MqttClient
-from temperaturewidget import TemperatureWidget, HumidityWidget, AirQualityWidget
+from temperaturewidget import TemperatureWidget, HumidityWidget, AirQualityWidget, NumberWidget
 from countdownwidget import CountdownWidget
 from pingwidget import PingWidget
 from framealert import FrameAlert, ImageAlert, UnicodeAlert
@@ -52,12 +52,14 @@ def regenAlert(topic,msg):
         esRegnet.off()
 
 def regenTropfen(topic,msg):
-    global esRegnet
+    global esRegnet, rainfall
     v = float(msg.decode())
     if v > 0.0:
         esRegnet.on()
+        rainfall.update(number=v,off=False)
     else:
         esRegnet.off()
+        rainfall.update(number=v,off=True)
 
 
 if __name__ == "__main__":
@@ -115,6 +117,7 @@ if __name__ == "__main__":
     arbeitszimmertemp = TemperatureWidget(x = 0, y = 50, size = 7)
     arbeitszimmerhum = HumidityWidget(x = 20, y = 50, size = 7)
     arbeitszimmerqual = AirQualityWidget(x = 30, y = 50, size = 7)
+    rainfall = NumberWidget(x=25,y=25,size=7,color=(0,96,255))
     pingrouter = PingWidget(x=0,y=63,target="fw01.ch5.garf.de",every=30,color=(0,0,0))
     astro = SunWidget(x=46,y=1,size=18)
     allefenster = FensterWidget(x=62,y=19,size=2)
@@ -142,6 +145,7 @@ if __name__ == "__main__":
     widgetlist.append(allefenster)
     widgetlist.append(motion)
     widgetlist.append(aussentemperatur)
+    widgetlist.append(rainfall)
 
     client = MqttClient()
     client.subscribe("/Chattenweg5/Garten/temperature",gardentemp.update)

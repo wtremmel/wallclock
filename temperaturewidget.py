@@ -5,6 +5,40 @@ from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 import time
 
+class NumberWidget(Widget):
+    def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64,font=None):
+        super(NumberWidget,self).__init__(x,y,color,size,width,height)
+        if font:
+            self.font = ImageFont.load("fonts/"+font)
+        else:
+            self.font = ImageFont.load("fonts/"+self.size2font(size))
+
+        self.lastnumber = None
+        self.off = True
+        self.lastupdate = 0
+
+    def update(self,number=None,off=False):
+        if number == None:
+            return
+
+        if off == True:
+            self.image = Image.new("RGBA",(self.width,self.height))
+            self.lastupdate = time.time()
+            self.changed = True
+            return
+
+        q = number
+        self.lastupdate = time.time()
+        if (self.lastnumber != q):
+            numStr = "{:2.2f}".format(q)
+            self.image = Image.new("RGBA",(self.width,self.height))
+            draw = ImageDraw.Draw(self.image)
+            draw.text((self.x,self.y),numStr,font=self.font,fill=self.color)
+            self.lastnumber = q
+            self.changed = True
+        else:
+            self.changed = False
+
 class AirQualityWidget(Widget):
     def __init__(self,x=0,y=0,color=(255,255,255),size=15,width=64,height=64,font=None):
         super(AirQualityWidget,self).__init__(x,y,color,size,width,height)
