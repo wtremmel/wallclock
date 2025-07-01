@@ -53,7 +53,7 @@ class AirQualityWidget(Widget):
 
     def update(self,sensor=None, airquality=None):
         if airquality == None:
-            if (time.time() - self.lastupdate > 60*5):
+            if (time.time() - self.lastupdate > 60*10):
                 self.image = Image.new("RGBA",(self.width,self.height))
                 self.lastupdate = time.time()
                 self.changed = True
@@ -92,7 +92,7 @@ class HumidityWidget(Widget):
 
     def update(self,sensor=None, humidity=None):
         if humidity == None:
-            if (time.time() - self.lastupdate > 60*5):
+            if (time.time() - self.lastupdate > 60*10):
                 self.image = Image.new("RGBA",(self.width,self.height))
                 self.lastupdate = time.time()
                 self.changed = True
@@ -137,7 +137,7 @@ class TemperatureWidget(Widget):
         except:
             temperature = None
         if temperature == None:
-            if (time.time() - self.lastupdate > 60*5):
+            if (time.time() - self.lastupdate > 60*10):
                 self.image = Image.new("RGBA",(self.width,self.height))
                 self.lastupdate = time.time()
                 self.changed = True
@@ -179,7 +179,7 @@ class TemperatureWidget(Widget):
         # remove all too old readings and record the minimum
         minimum = s
         for x in iter(self.sensors):
-            if (x.update < time.time() - 5*60):
+            if (x.update < time.time() - 10*60):
                 del self.sensors[x]
             elif x.value < minimum.value:
                 minimum = x
