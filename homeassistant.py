@@ -30,7 +30,9 @@ class HomeAssistant():
 
 if __name__ == "__main__":
     m = HomeAssistant()
-    r = m.getState("binary_sensor.allefenster")
+    r = m.getState("sensor.bodenfeuchte_temperature")
+    print(r['state'])
+    exit
 
     print(r['attributes']['entity_id'])
     for window in r['attributes']['entity_id']:

@@ -5,6 +5,7 @@ from widget import Widget
 from PIL import Image, ImageDraw, ImageFont
 from house import House
 import re
+import configparser
 
 class MovementWidget(Widget):
     class Sensor:
